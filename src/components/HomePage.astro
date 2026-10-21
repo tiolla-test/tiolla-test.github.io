@@ -1,0 +1,209 @@
+---
+import Base from '../layouts/Base.astro';
+import profile from '../data/profile.json';
+import groups from '../data/groups.json';
+import photoSrc from '../assets/photo.jpg';
+import { getCases, picture, imgTag } from '../lib/cases.js';
+import { UI, homeUrl, caseUrl, assetUrl } from '../lib/i18n.js';
+import { mangoMap, mangoList, PATH } from '../lib/schemas.js';
+
+const { lang } = Astro.props;
+const t = (ru, en) => (lang === 'ru' ? ru : en);
+const cases = await getCases();
+const pad = (n) => String(n).padStart(2, '0');
+const name = profile.name[lang];
+const photo = await picture(photoSrc);
+const liveChip = `<span class="chip chip-live">${UI[lang].liveChip}</span>`;
+const total = cases.length;
+
+const ficStations = PATH.points.map(([x, y], i) => ({ x, y, i, ty: y > 200 ? y + 74 : y - 50, label: PATH.labels[lang][i], slug: PATH.slugs[i], href: caseUrl(lang, PATH.slugs[i]) }));
+const reelHrefs = ['aliquot-station', 'participant-portal', 'ai-robot'].map((s) => caseUrl(lang, s));
+const facts = [[6, 'лет в B2B-интерфейсах', 'years in B2B interfaces'], [total, 'кейсов целиком', 'full case studies'], [3, 'живых прототипа', 'live prototypes']];
+const marquee = [['Постановка задач', 'Problem framing'], ['Пользовательские пути', 'User flows'], ['Продуктовая логика', 'Product logic'], ['Интерфейс', 'Interface'],
+  ['Прототип', 'Prototyping'], ['Дизайн-система', 'Design system'], ['Исследования', 'Research'], ['Анализ рынка', 'Market analysis'], ['Сопровождение разработки', 'Development support']];
+const nums = [
+  { v: 20000, text: ['визитов за двухлетний цикл при 4000 участников', 'visits over a two-year cycle with 4,000 participants'], slug: 'participant-portal', link: ['Кабинет участника', 'Participant portal'] },
+  { v: 16000, text: ['подписаний и проверок убрало согласие, подписанное один раз', 'signatures and checks removed by a consent signed once'], slug: 'participant-portal', link: ['Кабинет участника', 'Participant portal'] },
+  { v: 39290, text: ['строк отклонил импорт в базу биобанка, три четверти из них дубликаты', 'rows rejected by the biobank import, three quarters of them duplicates'], slug: 'aliquot-station', link: ['Станция аликвот', 'Aliquot station'] },
+];
+const fmt = (v) => v.toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-US');
+const contactHref = (h) => (/^(mailto:|https?:)/.test(h) ? h : assetUrl(h));
+---
+<Base lang={lang} page="home" altHref={homeUrl(lang === 'ru' ? 'en' : 'ru')}>
+<div id="home">
+
+<section class="hero" aria-labelledby="hero-t">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="hero-copy">
+    <p class="mono hero-kick h-anim">{name} · {profile.city[lang]}</p>
+    <h1 class="hero-title h-anim" id="hero-t">
+      <span class="ht-line"><span>{t('Продуктовый дизайнер', 'Product designer')}</span></span>
+      <span class="ht-line"><span>{t('медицинских систем', 'for medical systems')}</span></span>
+      <span class="ht-line ht-acc"><span>{t('и AI-роботов', 'and AI robots')}</span></span>
+    </h1>
+    <p class="hero-sub h-anim">{t('ФИЦ Биомед и MANGO OFFICE: исследования, постановка задач, интерфейсы, прототипы и дизайн-системы. Прототипы из кейсов здесь играют сами, а внутри кейсов их можно потрогать.',
+      'FIC Biomed and MANGO OFFICE: research, problem framing, interfaces, prototypes and design systems. Prototypes from the cases play here by themselves, and inside the cases you can try them.')}</p>
+    <ul class="hero-facts h-anim">
+      {facts.map(([n, ru, en]) => <li><b>{n}</b><span>{t(ru, en)}</span></li>)}
+    </ul>
+    <div class="hero-act h-anim">
+      <a class="btn-round" href="#work" data-magnetic>{t('Смотреть работы', 'See the work')}<span class="arr" aria-hidden="true">↓</span></a>
+      <a class="hero-link mono" href="#contact">{t('Контакты', 'Contact')} →</a>
+    </div>
+  </div>
+  <div class="hero-vis h-anim">
+    <div class="reel" aria-label={t('Живой прототип из кейсов', 'Live prototype from the cases')}>
+      <div class="reel-bar">
+        <span class="reel-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <div class="reel-tabs" role="tablist">
+          {[['Штатив', 'Rack'], ['Анкета', 'Questionnaire'], ['AI-робот', 'AI robot']].map(([ru, en], i) =>
+            <button type="button" role="tab" data-sc={i} aria-selected={i === 0 ? 'true' : 'false'}>{t(ru, en)}</button>)}
+        </div>
+        <a class="reel-go mono" href={reelHrefs[0]} data-hrefs={JSON.stringify(reelHrefs)} data-cursor="open">{t('Кейс', 'Case')} →</a>
+      </div>
+      <div class="reel-stage"></div>
+      <div class="reel-prog"><i></i></div>
+    </div>
+    <figure class="hero-photo" set:html={imgTag(photo, name, { zoom: false, eager: true })} />
+  </div>
+</section>
+
+<div class="mq" aria-hidden="true"><div class="mq-track">
+  {[0, 1].map(() => <div class="mq-set">{marquee.map(([ru, en]) => <><span>{t(ru, en)}</span><i>✦</i></>)}</div>)}
+</div></div>
+
+<section class="work" id="work" aria-labelledby="work-t">
+  <header class="sec-head">
+    <div>
+      <p class="mono rv">{t('Кейсы целиком: задача, решения, проверка, результат', 'Full case studies: problem, decisions, testing, result')}</p>
+      <h2 class="display rv" id="work-t">{t('Работы', 'Work')}</h2>
+    </div>
+    <span class="count rv" aria-label={String(total)}>{total}</span>
+  </header>
+
+  {groups.map((g, gi) => {
+    const list = cases.filter((c) => c.group === g.id);
+    return (
+      <div class="group" id={g.id}>
+        <div class="group-head">
+          <div class="rv">
+            <p class="mono group-k">{pad(gi + 1)} · {g.label[lang]} · {g.years}</p>
+            <h3 class="group-t">{g.title[lang]}</h3>
+            <p class="group-p">{g.text[lang]}</p>
+          </div>
+        </div>
+        <div class:list={['mg', { fmg: g.map === 'fic' }]}>
+          <div class="mg-map">
+            {g.map === 'fic' && (
+              <div class="fmap rv">
+                <svg class="p-route" viewBox="0 0 1200 520" aria-label={t('Путь образца через систему', 'The sample’s path through the system')}>
+                  <path class="p-base" d={PATH.d} /><path class="p-done" d={PATH.d} /><path class="p-hit" d={PATH.d} />
+                  {ficStations.map((s) => (
+                    <g class="p-st" data-i={s.i} data-slug={s.slug} data-href={s.href}><circle cx={s.x} cy={s.y} r="17" /><text x={s.x} y={s.ty} text-anchor="middle">{s.label}</text></g>
+                  ))}
+                  <g class="p-tube" data-cursor="drag"><g transform="scale(1.7)"><circle class="p-glow" r="26" />
+                    <g transform="translate(-12,-62)"><rect x="1" y="0" width="22" height="9" rx="2" fill="#F4F0E8" />
+                    <path d="M4 9 h16 v40 a8 8 0 0 1 -16 0 z" fill="rgba(244,240,232,.12)" stroke="#F4F0E8" stroke-width="2" />
+                    <path d="M5.5 28 h13 v21 a6.5 6.5 0 0 1 -13 0 z" style="fill:var(--accent)" /></g></g></g>
+                </svg>
+                <div class="fprev">
+                  {list.filter((c) => c.cover).map((c, i) => <figure data-slug={c.slug} class={i === 0 ? 'on' : undefined} set:html={imgTag(c.images[c.cover], c.titles.ru, { zoom: false })} />)}
+                </div>
+              </div>
+            )}
+            {g.map === 'mango' && <div class="map mango-map rv"><div class="map-l" set:html={mangoMap(lang, [], null, true)} /><Fragment set:html={mangoList(lang)} /></div>}
+            {g.hint && <p class="mono map-hint">{g.hint[lang]}</p>}
+          </div>
+          <ol class="rows">
+            {list.map((c) => {
+              const l = c.local(lang);
+              return (
+                <li><a class="row" href={caseUrl(lang, c.slug)} data-cursor="open" data-slug={c.slug}
+                  data-st={c.stops ? c.stops.join(',') : undefined} data-marks={c.marks ? c.marks.map((m) => (m === 'qm' ? 'platform' : m)).join(' ') : (c.schema === 'qm' ? 'platform' : undefined)}>
+                  <span class="mono idx">{pad(c.n)}</span>
+                  <span class="row-title">{c.titles[lang]}</span>
+                  <span class="row-sub mono">{c.group === 'mango' ? l.kicker : l.meta}{l.chip && <span class="chip">{l.chip}</span>}{c.live?.length > 0 && <Fragment set:html={liveChip} />}</span>
+                  <span class="row-arrow" aria-hidden="true">→</span>
+                </a></li>
+              );
+            })}
+          </ol>
+        </div>
+      </div>
+    );
+  })}
+</section>
+
+<section class="nums" aria-labelledby="nums-t">
+  <p class="mono rv" id="nums-t">{t('В цифрах', 'In numbers')}</p>
+  <div class="nums-grid">
+    {nums.map((x) => (
+      <div class="num rv">
+        <span class="num-v" data-count={x.v}>{fmt(x.v)}</span>
+        <p>{t(...x.text)}</p><a class="mono" href={caseUrl(lang, x.slug)}>{t(...x.link)} →</a>
+      </div>
+    ))}
+  </div>
+  <p class="nums-note rv">{t('Числа взяты из кейсов. Как их считали, написано в самих кейсах.', 'The numbers come from the case studies, and each case explains how they were counted.')}</p>
+</section>
+
+<section class="about" id="about" aria-labelledby="about-t">
+  <h2 class="display rv" id="about-t">{t('Обо мне', 'About')}</h2>
+  <div class="about-body">
+    <div class="rv">
+      <div class="about-txt">{profile.about[lang].split('\n\n').map((p) => <p>{p}</p>)}</div>
+      <p class="mono about-fmt">{profile.city[lang]} · {profile.format[lang]}</p>
+      <p class="mono about-k">{t('Навыки', 'Skills')}</p>
+      <ul class="tags">{profile.skills[lang].map((x) => <li>{x}</li>)}</ul>
+      <p class="mono about-k">{t('Предметные области', 'Domains')}</p>
+      <ul class="tags">{profile.domains[lang].map((x) => <li>{x}</li>)}</ul>
+    </div>
+  </div>
+</section>
+
+<section class="cv" id="experience" aria-labelledby="exp-t">
+  <h2 class="display rv" id="exp-t">{t('Опыт', 'Experience')}</h2>
+  <ol class="exp">
+    {profile.experience.map((x) => (
+      <li class="rv"><span class="mono yr">{x.years}</span><div>
+        <p class="co">{x.company[lang]}</p>
+        <p class="role">{x.role[lang]}</p>
+        <div class="what">{x.what[lang].length === 1 ? x.what[lang][0] : <ul class="what-l">{x.what[lang].map((w) => <li>{w}</li>)}</ul>}</div>
+        {x.cases && <a class="go-cases" href={homeUrl(lang, x.cases.href)}>{x.cases[lang]} <span aria-hidden="true">↑</span></a>}
+      </div></li>
+    ))}
+  </ol>
+</section>
+
+<section class="cv cv-alt" id="education" aria-labelledby="edu-t">
+  <h2 class="display rv" id="edu-t">{t('Образование', 'Education')}</h2>
+  <ol class="exp">
+    {profile.education.map((x) => (
+      <li class="rv"><span class="mono yr">{x.years}<br><span class="kind">{x.kind[lang]}</span></span><div>
+        <p class="co">{x.place[lang]}</p>
+        <p class="role">{x.program[lang]}</p>
+      </div></li>
+    ))}
+  </ol>
+</section>
+
+<section class="contact" id="contact" aria-labelledby="contact-t">
+  <p class="mono rv">{t('Контакты', 'Contact')}</p>
+  <h2 class="mega rv" id="contact-t">{lang === 'ru' ? <>Напишите<br><em>мне</em></> : <>Get in<br><em>touch</em></>}</h2>
+  <ul class="c-list">
+    {profile.contacts.map((x) => (
+      <li class="rv"><span class="mono">{x.label[lang]}</span><span class="c-val">
+        <a href={contactHref(x.href)} target={x.href.startsWith('mailto:') ? undefined : '_blank'} rel={x.href.startsWith('mailto:') ? undefined : 'noopener'} data-magnetic>{x.text}</a>
+      </span></li>
+    ))}
+  </ul>
+  <footer class="foot mono">
+    <span>© 2026 {name}</span>
+    <span class="foot-c">{t('Сайт собран 16 октября 2026 г. из текстов кейсов. Английский текст переведён с помощью ИИ. Данные на экранах прототипов вымышленные.',
+      'Built on 16 October 2026 from the case study texts. The English text was translated with AI. Data on prototype screens is fictional.')}</span>
+    <a href="#" class="to-top">{t('Наверх', 'Back to top')} ↑</a>
+  </footer>
+</section>
+
+</div>
+</Base>

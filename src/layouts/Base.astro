@@ -1,0 +1,102 @@
+---
+import '../styles/global.css';
+import profile from '../data/profile.json';
+import { UI, homeUrl } from '../lib/i18n.js';
+
+const { lang, page, title, description, altHref } = Astro.props;
+const t = (ru, en) => (lang === 'ru' ? ru : en);
+const name = profile.name[lang];
+const fullTitle = title ? `${title} · ${name} · ${UI[lang].title}` : `${name} · ${UI[lang].title}`;
+const links = [
+  ['work', 'Работы', 'Work'],
+  ['about', 'Обо мне', 'About'],
+  ['experience', 'Опыт', 'Experience'],
+  ['education', 'Образование', 'Education'],
+  ['contact', 'Контакты', 'Contact'],
+];
+const otherLang = lang === 'ru' ? 'en' : 'ru';
+const langHref = { [lang]: Astro.url.pathname, [otherLang]: altHref };
+const paletteHtml = '<div class="pal-list">' + profile.palettes.map((p) =>
+  `<button type="button" data-theme-set="${p.id}" aria-pressed="${p.id === profile.palette}" style="--a:${p.accent};--b:${p.dark}"><i></i>${p[lang]}</button>`).join('') + '</div>';
+---
+<!doctype html>
+<html lang={lang} data-lang={lang} data-page={page} data-theme={profile.palette}
+  class:list={[page === 'home' ? 'in-home' : 'in-case', { 'no-pal': !profile.paletteSwitch }]}>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{fullTitle}</title>
+<meta name="description" content={description || UI[lang].description}>
+<meta name="theme-color" content="#0F0F0E">
+<link rel="alternate" hreflang={otherLang} href={altHref}>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300..900&family=Onest:wght@400..700&family=JetBrains+Mono:wght@400;500&display=swap">
+<script is:inline>
+(function () {
+  var R = document.documentElement, m = null, seen = null, th = null, wipe = null;
+  try { m = localStorage.getItem('pf-motion'); seen = sessionStorage.getItem('pf-seen'); th = localStorage.getItem('pf-theme'); wipe = sessionStorage.getItem('pf-wipe'); sessionStorage.removeItem('pf-wipe'); } catch (e) {}
+  if (th && /^[a-z]+$/.test(th)) R.setAttribute('data-theme', th);
+  var qm = location.search.match(/[?&]motion=(full|calm)/);
+  if (qm) m = qm[1];
+  if (m !== 'full' && m !== 'calm') m = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'calm' : 'full';
+  R.classList.add(m === 'full' ? 'm-full' : 'm-calm');
+  if (m === 'full' && wipe) R.classList.add('wipe-in');
+  else if (m === 'full' && !seen && R.getAttribute('data-page') === 'home' && document.visibilityState === 'visible' && matchMedia('(hover: hover) and (pointer: fine)').matches) R.classList.add('show-pre');
+  setTimeout(function () { R.classList.add('failsafe'); }, 5000);
+})();
+</script>
+</head>
+<body>
+<a class="skip" href={page === 'home' ? '#work' : '#main'}>{t('К работам', 'Skip to work')}</a>
+
+{page === 'home' && (
+  <div class="pre" aria-hidden="true">
+    <div class="pre-top mono"><span>{t('Портфолио', 'Portfolio')}</span><span>{t('Продуктовый дизайнер', 'Product designer')}</span></div>
+    <div><div class="pre-num">000</div><div class="pre-bar"><i></i></div></div>
+  </div>
+)}
+
+<div class="cur" aria-hidden="true"><div class="cur-ring"><span></span></div><div class="cur-dot"></div></div>
+<div class="wipe" aria-hidden="true"></div>
+<div class="prog" aria-hidden="true"><i></i></div>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="nav">
+  <a class="logo" href={homeUrl(lang)} aria-label={t('Портфолио', 'Portfolio')}><i></i>{name}</a>
+  <nav class="nav-links" aria-label={t('Разделы сайта', 'Site sections')}>
+    {links.map(([id, ru, en]) => <a href={homeUrl(lang, '#' + id)}>{t(ru, en)}</a>)}
+  </nav>
+  <div class="tgl" role="group" aria-label="Язык / Language">
+    {['ru', 'en'].map((l) => <button type="button" data-lang-set={l} data-href={langHref[l]} aria-pressed={l === lang ? 'true' : 'false'}>{l.toUpperCase()}</button>)}
+  </div>
+  <button type="button" class="mtg" aria-pressed="true">
+    <span class="mtg-l">{t('Анимация', 'Motion')}</span><span class="sw" aria-hidden="true"><i></i></span>
+  </button>
+  <button type="button" class="pal-btn" aria-expanded="false" aria-controls="pal"><i></i>{t('Цвет', 'Color')}</button>
+  <button type="button" class="menu-btn" aria-expanded="false" aria-controls="menu">{t('Меню', 'Menu')}</button>
+</header>
+
+<div class="pal" id="pal" hidden><p class="mono">{t('Цвет сайта', 'Site colors')}</p><Fragment set:html={paletteHtml} /></div>
+
+<div class="menu" id="menu">
+  {links.map(([id, ru, en]) => <a href={homeUrl(lang, '#' + id)}>{t(ru, en)}</a>)}
+  <div class="menu-set">
+    <div class="tgl" role="group" aria-label="Язык / Language">
+      {['ru', 'en'].map((l) => <button type="button" data-lang-set={l} data-href={langHref[l]} aria-pressed={l === lang ? 'true' : 'false'}>{l.toUpperCase()}</button>)}
+    </div>
+    <button type="button" class="mtg" aria-pressed="true">
+      <span class="mtg-l">{t('Анимация', 'Motion')}</span><span class="sw" aria-hidden="true"><i></i></span>
+    </button>
+  </div>
+  <Fragment set:html={paletteHtml} />
+</div>
+
+<slot />
+
+<div class="lb" hidden role="dialog" aria-modal="true" aria-label={t('Кадр', 'Image')}><button type="button" class="lb-x mono">{t('Закрыть', 'Close')} ✕</button><img alt=""></div>
+
+<script src="../scripts/app.js"></script>
+</body>
+</html>
+

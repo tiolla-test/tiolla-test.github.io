@@ -1,0 +1,56 @@
+---
+import Base from '../layouts/Base.astro';
+import LiveBlock from './LiveBlock.astro';
+import { getCases, renderCase, imgTag } from '../lib/cases.js';
+import { UI, GROUPS, homeUrl, caseUrl } from '../lib/i18n.js';
+import { esc } from '../lib/schemas.js';
+
+const { slug, lang } = Astro.props;
+const cases = await getCases();
+const i = cases.findIndex((c) => c.slug === slug);
+const c = cases[i];
+const next = cases[(i + 1) % cases.length];
+const d = await renderCase(c, lang);
+const u = UI[lang];
+const local = c.local(d.lang);
+const kicker = c.group === 'mango' ? `${GROUPS.mango[lang]} · ${esc(local.kicker)}` : `${GROUPS.fic[lang]} · ${esc(local.meta)}`;
+const cover = c.cover && !c.live?.length ? imgTag(c.images[c.cover], d.title, { zoom: false, eager: true }) : '';
+const pad = (n) => String(n).padStart(2, '0');
+---
+<Base lang={lang} page="case" title={d.title} altHref={caseUrl(lang === 'ru' ? 'en' : 'ru', slug)}>
+<main id="main" class="case-view">
+<article class="case" lang={d.lang} data-slug={slug}>
+<header class="c-head">
+  <a class="back mono" href={homeUrl(lang, '#work')} data-back><span class="arr">←</span> {u.all}</a>
+  <div class="c-kicker mono"><span set:html={kicker} /><span>{pad(c.n)} / {cases.length}</span></div>
+  <h1 class="c-title split-w">{d.title}</h1>
+  <div class="c-sub"><p class="c-lede" set:html={d.lede} /><p class="c-byline mono"><Fragment set:html={d.byline} />{c.group === 'mango' && <> <span class="chip">{local.chip}</span></>}</p></div>
+</header>
+{c.live?.length > 0 && <LiveBlock kinds={c.live} lang={lang} />}
+{cover && <figure class="c-cover rv-cover" set:html={cover} />}
+<dl class="dossier">
+  {d.dossier.map((x) => <div class={x.wide ? 'wide' : ''}><dt set:html={x.label} /><dd set:html={x.wide ? x.value.replaceAll(' · ', '<br>') : x.value} /></div>)}
+</dl>
+{d.note && <div class="c-note rv" set:html={d.note} />}
+<div class="c-body">
+  <nav class="toc" aria-label={u.toc}><p class="mono">{u.toc}</p><ol>
+    {d.sections.map((s, k) => <li><a href={`#c-s${k + 1}`} data-sec={`c-s${k + 1}`} set:html={s.title} /></li>)}
+  </ol></nav>
+  <div class="c-content">
+    {d.sections.map((s, k) => (
+      <section id={`c-s${k + 1}`} class:list={['sec', { 'sec-brief': s.brief }]}>
+        <h2><span class="mono">{pad(k + 1)}</span><span set:html={s.title} /></h2>
+        <Fragment set:html={s.body} />
+      </section>
+    ))}
+    {d.colophon && <p class="colophon" set:html={d.colophon} />}
+  </div>
+</div>
+<footer class="c-next"><a class="next" href={caseUrl(lang, next.slug)} data-cursor="open">
+  <span class="mono">{next.n !== 1 ? u.next : u.first} · {pad(next.n)}</span>
+  <span class="next-t">{next.titles[lang]}</span>
+  <span class="next-arr" aria-hidden="true">→</span>
+</a></footer>
+</article>
+</main>
+</Base>

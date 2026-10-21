@@ -1,0 +1,328 @@
+{
+  "name": {
+    "ru": "Ольга Тихонова",
+    "en": "Olga Tikhonova"
+  },
+  "city": {
+    "ru": "Москва",
+    "en": "Moscow"
+  },
+  "about": {
+    "ru": "Шесть лет проектирую интерфейсы для сложных B2B-продуктов, из них четыре года в продуктовых командах. Работаю с конструкторами сценариев и пайплайнов, AI-агентами, высоконагруженными системами и аналитическими логами.\n\nПеревожу технические абстракции (эксперименты, метрики, модели) в интерфейсы для инженеров, исследователей и врачей. Тесно работаю с разработкой, аналитикой и продакт-менеджерами.",
+    "en": "For six years I have been designing interfaces for complex B2B products, four of them in product teams. I work with scenario and pipeline builders, AI agents, high-load systems and analytics logs.\n\nI turn technical abstractions (experiments, metrics, models) into interfaces for engineers, researchers and doctors. I work closely with development, analytics and product managers."
+  },
+  "format": {
+    "ru": "Полная или частичная занятость, проекты · в офисе, удалённо или гибрид",
+    "en": "Full-time, part-time or project work · on-site, remote or hybrid"
+  },
+  "skills": {
+    "ru": [
+      "Figma",
+      "UX-исследования",
+      "Юзабилити-тестирование",
+      "CJM",
+      "User Flow",
+      "User Story Mapping",
+      "Информационная архитектура",
+      "Прототипирование",
+      "Дизайн-системы",
+      "UX-тексты",
+      "Визуализация данных",
+      "Продуктовые метрики",
+      "A/B-тесты",
+      "Конкурентный анализ",
+      "Agile и SAFe"
+    ],
+    "en": [
+      "Figma",
+      "UX research",
+      "Usability testing",
+      "CJM",
+      "User flows",
+      "User story mapping",
+      "Information architecture",
+      "Prototyping",
+      "Design systems",
+      "UX writing",
+      "Data visualization",
+      "Product metrics",
+      "A/B testing",
+      "Competitive analysis",
+      "Agile and SAFe"
+    ]
+  },
+  "domains": {
+    "ru": [
+      "SaaS",
+      "B2B и B2E",
+      "AI/ML: конструкторы, NLP, RAG",
+      "Телеком",
+      "Медицинские системы",
+      "Спортивные технологии"
+    ],
+    "en": [
+      "SaaS",
+      "B2B and B2E",
+      "AI/ML: builders, NLP, RAG",
+      "Telecom",
+      "Medical systems",
+      "Sports tech"
+    ]
+  },
+  "contacts": [
+    {
+      "label": {
+        "ru": "Почта",
+        "en": "Email"
+      },
+      "text": "tiholla@yandex.ru",
+      "href": "mailto:tiholla@yandex.ru"
+    },
+    {
+      "label": {
+        "ru": "Telegram",
+        "en": "Telegram"
+      },
+      "text": "@Solis_mi",
+      "href": "https://t.me/Solis_mi"
+    },
+    {
+      "label": {
+        "ru": "Сайт",
+        "en": "Website"
+      },
+      "text": "tiholla.ru",
+      "href": "https://tiholla.ru"
+    },
+    {
+      "label": {
+        "ru": "Резюме",
+        "en": "CV"
+      },
+      "text": "PDF",
+      "href": "resume.pdf"
+    }
+  ],
+  "experience": [
+    {
+      "years": "2026",
+      "company": {
+        "ru": "ФИЦ Биомед",
+        "en": "FIC Biomed"
+      },
+      "role": {
+        "ru": "Продуктовый дизайнер и дизайн-аналитик",
+        "en": "Product designer and UX analyst"
+      },
+      "what": {
+        "ru": [
+          "Медицинская информационная система: кабинет участника, кабинет врача, станция аликвот биобанка"
+        ],
+        "en": [
+          "Medical information system: participant portal, doctor portal, biobank aliquot station"
+        ]
+      },
+      "cases": {
+        "href": "#fic",
+        "ru": "4 кейса",
+        "en": "4 cases"
+      }
+    },
+    {
+      "years": "2021–2026",
+      "company": {
+        "ru": "MANGO OFFICE (Манго Телеком)",
+        "en": "MANGO OFFICE (Mango Telecom)"
+      },
+      "role": {
+        "ru": "Продуктовый дизайнер",
+        "en": "Product designer"
+      },
+      "what": {
+        "ru": [
+          "Контакт-центр, Манго Диалоги, контроль качества, платформа «Роботы»: конструктор голосовых и чат-ботов, AI-агенты",
+          "Конструктор сценариев без кода для голосовых и текстовых ботов: больше 20 типов действий, от HTTP-запросов до интеграций",
+          "Три конструктора (чат-боты, голосовые роботы, роботы-администраторы) сведены к одной логике и переведены на единую дизайн-систему",
+          "Интерфейс настройки AI-агентов с RAG: ассистенты отвечают по корпоративным знаниям, без кода",
+          "CJM покупки и подключения роботов",
+          "Упрощённые блоки логики «Сравнить значения» и «Вычислить»",
+          "История диалогов в виде лога действий вместо прослушивания записи"
+        ],
+        "en": [
+          "Contact center, Mango Dialogs, quality control, the Robots platform: voice and chatbot builder, AI agents",
+          "A no-code scenario builder for voice and text bots: more than 20 action types, from HTTP requests to integrations",
+          "Three builders (chatbots, voice robots, robot administrators) brought to one logic and moved to a single design system",
+          "An AI agent setup interface with RAG: assistants answer from corporate knowledge, without code",
+          "CJM of buying and connecting robots",
+          "Simplified logic blocks “Compare values” and “Calculate”",
+          "Dialogue history as an action log instead of listening to the recording"
+        ]
+      },
+      "cases": {
+        "href": "#mango",
+        "ru": "9 кейсов",
+        "en": "9 cases"
+      }
+    },
+    {
+      "years": "2020–2021",
+      "company": {
+        "ru": "МФТИ",
+        "en": "MIPT"
+      },
+      "role": {
+        "ru": "UX/UI-дизайнер",
+        "en": "UX/UI designer"
+      },
+      "what": {
+        "ru": [
+          "Интерфейс кластеризации интентов для сотрудников банка без навыков программирования: работа с NLP-моделями и группировка намерений пользователей",
+          "Система для больниц: панель администратора, панель оператора, терминал самообслуживания и табло"
+        ],
+        "en": [
+          "An intent clustering interface for bank employees without programming skills: working with NLP models and grouping user intents",
+          "A system for hospitals: admin panel, operator panel, self-service kiosk and display board"
+        ]
+      },
+      "cases": null
+    },
+    {
+      "years": "2020",
+      "company": {
+        "ru": "Федерация тенниса России (Сколково)",
+        "en": "Russian Tennis Federation (Skolkovo)"
+      },
+      "role": {
+        "ru": "UX/UI-дизайнер",
+        "en": "UX/UI designer"
+      },
+      "what": {
+        "ru": [
+          "Единая платформа для турниров с ролями судей, родителей, представителей и организаторов",
+          "Календари, турнирные сетки по олимпийской и круговой системам, расписание матчей"
+        ],
+        "en": [
+          "A single tournament platform with roles for referees, parents, representatives and organizers",
+          "Calendars, single-elimination and round-robin brackets, match schedules"
+        ]
+      },
+      "cases": null
+    }
+  ],
+  "education": [
+    {
+      "years": "2014",
+      "place": {
+        "ru": "РЭУ им. Г. В. Плеханова",
+        "en": "Plekhanov Russian University of Economics"
+      },
+      "program": {
+        "ru": "Высшее образование, факультет менеджмента",
+        "en": "Higher education, Faculty of Management"
+      },
+      "kind": {
+        "ru": "высшее",
+        "en": "degree"
+      }
+    },
+    {
+      "years": "2026",
+      "place": {
+        "ru": "Яндекс Практикум",
+        "en": "Yandex Practicum"
+      },
+      "program": {
+        "ru": "Дизайн мобильных и кросс-платформенных приложений",
+        "en": "Mobile and cross-platform app design"
+      },
+      "kind": {
+        "ru": "курс",
+        "en": "course"
+      }
+    },
+    {
+      "years": "2025",
+      "place": {
+        "ru": "Яндекс Практикум",
+        "en": "Yandex Practicum"
+      },
+      "program": {
+        "ru": "Продуктовый подход",
+        "en": "Product approach"
+      },
+      "kind": {
+        "ru": "курс",
+        "en": "course"
+      }
+    },
+    {
+      "years": "2025",
+      "place": {
+        "ru": "ОКБ «Понедельник»",
+        "en": "OKB Ponedelnik"
+      },
+      "program": {
+        "ru": "Интенсив Product Market Boost",
+        "en": "Product Market Boost intensive"
+      },
+      "kind": {
+        "ru": "курс",
+        "en": "course"
+      }
+    },
+    {
+      "years": "2020",
+      "place": {
+        "ru": "Contented",
+        "en": "Contented"
+      },
+      "program": {
+        "ru": "Дизайнер интерфейсов",
+        "en": "Interface designer"
+      },
+      "kind": {
+        "ru": "курс",
+        "en": "course"
+      }
+    }
+  ],
+  "palette": "cinnabar",
+  "paletteSwitch": true,
+  "palettes": [
+    {
+      "id": "cinnabar",
+      "ru": "Киноварь",
+      "en": "Cinnabar",
+      "accent": "#FF4F1F",
+      "dark": "#0F0F0E"
+    },
+    {
+      "id": "cobalt",
+      "ru": "Кобальт",
+      "en": "Cobalt",
+      "accent": "#5B7CFF",
+      "dark": "#0B1020"
+    },
+    {
+      "id": "lime",
+      "ru": "Лайм",
+      "en": "Lime",
+      "accent": "#C6F035",
+      "dark": "#0E100C"
+    },
+    {
+      "id": "peony",
+      "ru": "Пион",
+      "en": "Peony",
+      "accent": "#FF6A95",
+      "dark": "#170E19"
+    },
+    {
+      "id": "teal",
+      "ru": "Бирюза",
+      "en": "Teal",
+      "accent": "#2CDDBB",
+      "dark": "#091614"
+    }
+  ]
+}

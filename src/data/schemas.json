@@ -1,0 +1,293 @@
+{
+  "fic": {
+    "ru": {
+      "nodes": [
+        [
+          "Кабинет участника",
+          "заявка, анкета,",
+          "запись на визит"
+        ],
+        [
+          "Кабинет врача",
+          "проверка заявки",
+          "и анкеты"
+        ],
+        [
+          "Визит в клинику",
+          "кровь становится",
+          "образцом"
+        ],
+        [
+          "Станция аликвот",
+          "серия, штатив,",
+          "реестр"
+        ]
+      ],
+      "this": "этот кейс",
+      "other": "отдельный кейс",
+      "open": "кейс →",
+      "arc": "решение и замечания",
+      "stages": "стадии образца: кровь получена, в обработке, готово или пересдача",
+      "noint": "интеграции пока нет, в прототипе стадии переключаются вручную",
+      "title": "Три рабочих места медицинской информационной системы",
+      "desc": "Кабинет участника передаёт заявку и анкету в кабинет врача, врач возвращает решение. Затем визит в клинику, где кровь становится образцом, и станция аликвот в биобанке. Стадии образца возвращаются в кабинет участника, интеграции пока нет."
+    },
+    "en": {
+      "nodes": [
+        [
+          "Participant portal",
+          "application, questionnaire,",
+          "visit booking"
+        ],
+        [
+          "Doctor portal",
+          "reviews applications",
+          "and questionnaires"
+        ],
+        [
+          "Clinic visit",
+          "blood becomes",
+          "a sample"
+        ],
+        [
+          "Aliquot station",
+          "series, rack,",
+          "registry"
+        ]
+      ],
+      "this": "this case",
+      "other": "separate case",
+      "open": "case →",
+      "arc": "decision and comments",
+      "stages": "sample stages: blood received, processing, ready or retest",
+      "noint": "no integration yet, in the prototype stages are switched by hand",
+      "title": "Three workplaces of one medical information system",
+      "desc": "The participant portal sends the application and questionnaire to the doctor portal, the doctor returns a decision. Then a clinic visit, where blood becomes a sample, and the aliquot station in the biobank. Sample stages return to the participant portal; there is no integration yet."
+    },
+    "nodeSlugs": {
+      "0": "participant-portal",
+      "1": "doctor-portal",
+      "3": "aliquot-station"
+    }
+  },
+  "mango": {
+    "nodes": {
+      "constructor": {
+        "x": 20,
+        "y": 20,
+        "w": 910,
+        "h": 50,
+        "ru": [
+          "Визуальный конструктор скриптов",
+          "скрипт собирается без программирования"
+        ],
+        "en": [
+          "Visual script builder",
+          "a script is assembled without code"
+        ]
+      },
+      "voice": {
+        "x": 20,
+        "y": 106,
+        "w": 290,
+        "h": 70,
+        "ru": [
+          "Голосовой робот",
+          "звонки по скрипту"
+        ],
+        "en": [
+          "Voice robot",
+          "calls by script"
+        ]
+      },
+      "chat": {
+        "x": 330,
+        "y": 106,
+        "w": 290,
+        "h": 70,
+        "ru": [
+          "Чат-бот",
+          "переписка в текстовых каналах"
+        ],
+        "en": [
+          "Chatbot",
+          "conversations in text channels"
+        ]
+      },
+      "admin": {
+        "x": 640,
+        "y": 106,
+        "w": 290,
+        "h": 70,
+        "ru": [
+          "Робот-администратор",
+          "без диалога: данные из CRM, обзвон"
+        ],
+        "en": [
+          "Robot administrator",
+          "no dialogue: CRM data, call campaigns"
+        ]
+      },
+      "airobot": {
+        "x": 20,
+        "y": 216,
+        "w": 290,
+        "h": 70,
+        "ru": [
+          "AI-робот",
+          "определяет смысл ответа моделью"
+        ],
+        "en": [
+          "AI robot",
+          "understands answers with a model"
+        ]
+      },
+      "assistant": {
+        "x": 330,
+        "y": 216,
+        "w": 290,
+        "h": 70,
+        "ru": [
+          "AI-ассистент",
+          "языковая модель ведёт часть диалога"
+        ],
+        "en": [
+          "AI assistant",
+          "a language model runs part of the dialogue"
+        ]
+      }
+    },
+    "ru": {
+      "this": "этот кейс",
+      "platform": "Платформа MANGO OFFICE: виртуальная АТС, контакт-центр, речевая аналитика",
+      "label": "Продукт «Роботы»: конструктор, голосовой робот, чат-бот, робот-администратор, AI-робот и AI-ассистент.",
+      "cap": "Продукт «Роботы» MANGO OFFICE. Выделена часть продукта, о которой этот кейс. AI-робот работает в голосовом роботе и чат-боте, AI-ассистент только в чат-боте."
+    },
+    "en": {
+      "this": "this case",
+      "platform": "MANGO OFFICE platform: virtual PBX, contact center, speech analytics",
+      "label": "The Robots product: script builder, voice robot, chatbot, robot administrator, AI robot and AI assistant.",
+      "cap": "The Robots product at MANGO OFFICE. The highlighted part is the one this case is about. The AI robot works in the voice robot and the chatbot, the AI assistant only in the chatbot."
+    }
+  },
+  "qm": {
+    "steps": {
+      "ru": [
+        [
+          "Отбор разговоров",
+          "контролёр выбирал",
+          "звонки сам"
+        ],
+        [
+          "Прослушивание",
+          "записи хранятся",
+          "в одном месте"
+        ],
+        [
+          "Оценка по бланку",
+          "единый бланк",
+          "для всех"
+        ],
+        [
+          "Результат",
+          "оценку видят оператор",
+          "и руководитель"
+        ],
+        [
+          "Спор",
+          "оценку можно",
+          "проверить позже"
+        ]
+      ],
+      "en": [
+        [
+          "Call selection",
+          "the reviewer picked",
+          "calls by hand"
+        ],
+        [
+          "Listening",
+          "recordings are stored",
+          "in one place"
+        ],
+        [
+          "Scoring",
+          "one form",
+          "for everyone"
+        ],
+        [
+          "Result",
+          "the operator and the",
+          "manager see the score"
+        ],
+        [
+          "Dispute",
+          "the score can be",
+          "checked later"
+        ]
+      ]
+    },
+    "ru": {
+      "bad": "не проверялся",
+      "ok": "прозрачно",
+      "this": "этот кейс",
+      "label": "Процесс контроля качества из пяти шагов: отбор разговоров, прослушивание, оценка по бланку, результат, спор. Выделен отбор разговоров, единственный шаг, который не проверялся.",
+      "cap": "Контроль качества в контакт-центре MANGO OFFICE. До рандомайзера прозрачными были все шаги, кроме первого: какие разговоры слушать, контролёр решал сам."
+    },
+    "en": {
+      "bad": "not checked",
+      "ok": "transparent",
+      "this": "this case",
+      "label": "A five-step quality control process: call selection, listening, scoring, result, dispute. Call selection is highlighted, the only step that was not checked.",
+      "cap": "Quality control in the MANGO OFFICE contact center. Before the randomizer, every step was transparent except the first: the reviewer decided alone which calls to listen to."
+    }
+  },
+  "path": {
+    "d": "M110 380 C 230 380, 270 140, 380 140 S 510 380, 620 380 S 750 140, 860 140 S 980 380, 1090 380",
+    "points": [
+      [
+        110,
+        380
+      ],
+      [
+        380,
+        140
+      ],
+      [
+        620,
+        380
+      ],
+      [
+        860,
+        140
+      ],
+      [
+        1090,
+        380
+      ]
+    ],
+    "slugs": [
+      "participant-portal",
+      "doctor-portal",
+      "fic-overview",
+      "aliquot-station",
+      "fic-overview"
+    ],
+    "labels": {
+      "ru": [
+        "01 Заявка",
+        "02 Врач",
+        "03 Визит",
+        "04 Штатив",
+        "05 Стадии"
+      ],
+      "en": [
+        "01 Application",
+        "02 Doctor",
+        "03 Visit",
+        "04 Rack",
+        "05 Stages"
+      ]
+    }
+  }
+}

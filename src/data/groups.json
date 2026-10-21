@@ -1,0 +1,32 @@
+[
+  {
+    "id": "fic",
+    "label": { "ru": "ФИЦ Биомед", "en": "FIC Biomed" },
+    "years": "2026",
+    "title": { "ru": "Медицинская информационная система", "en": "Medical information system" },
+    "text": {
+      "ru": "Кабинет участника, кабинет врача и станция аликвот биобанка. Это три рабочих места одной системы. Участник подаёт заявку и анкету, врач их проверяет, кровь с визита становится образцом, лаборант делит его на аликвоты.",
+      "en": "The participant portal, the doctor portal and the biobank aliquot station are three workplaces of one system. A participant submits an application and a questionnaire, a doctor reviews them, blood from the visit becomes a sample, and a lab technician splits it into aliquots."
+    },
+    "map": "fic",
+    "hint": {
+      "ru": "Наведите на кейс, и пробирка покажет его место на пути образца",
+      "en": "Hover a case and the tube shows its place on the sample’s path"
+    }
+  },
+  {
+    "id": "mango",
+    "label": { "ru": "MANGO OFFICE", "en": "MANGO OFFICE" },
+    "years": "2023–2025",
+    "title": { "ru": "Роботы и чат-боты", "en": "Robots and chatbots" },
+    "text": {
+      "ru": "«Роботы» объединяют голосового робота, чат-бота, робота-администратора, AI-робота и AI-ассистента. Скрипт для всех собирается в визуальном конструкторе: пользователь раскладывает блоки на полотне и соединяет их связями.",
+      "en": "Robots brings together the voice robot, the chatbot, the robot administrator, the AI robot and the AI assistant. Scripts for all of them are built in a visual builder where the user lays out blocks on a canvas and connects them."
+    },
+    "map": "mango",
+    "hint": {
+      "ru": "Наведите на кейс, и на схеме выделится его часть продукта",
+      "en": "Hover a case to see its part of the product"
+    }
+  }
+]

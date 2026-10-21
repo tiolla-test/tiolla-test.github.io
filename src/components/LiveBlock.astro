@@ -1,0 +1,18 @@
+---
+import { UI, LIVE_TAB, DEMO_TXT } from '../lib/i18n.js';
+
+const { kinds, lang } = Astro.props;
+---
+<section class="c-live">
+  {kinds.length > 1 && (
+    <div class="live-tabs" role="tablist" aria-label={UI[lang].lives}>
+      {kinds.map((k, i) => <button type="button" role="tab" data-tab={k} aria-selected={i === 0 ? 'true' : 'false'}>{LIVE_TAB[k][lang]}</button>)}
+    </div>
+  )}
+  {kinds.map((k, i) => (
+    <div class="live rv" data-demo={k} hidden={i > 0}>
+      <div class="live-h"><span class="live-tag">{UI[lang].live}</span><p class="live-t">{DEMO_TXT[k][lang][0]}</p><p class="live-s">{DEMO_TXT[k][lang][1]}</p></div>
+      <div class="live-b"></div>
+    </div>
+  ))}
+</section>
