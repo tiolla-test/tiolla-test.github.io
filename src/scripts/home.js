@@ -1,4 +1,4 @@
-import { D, R, G, full, lenis, store, split } from './env.js';
+import { D, R, W, G, full, lenis, store, split } from './env.js';
 
 export function heroIntro() {
   if (!full) { R.classList.add('hero-ready'); return; }
@@ -37,7 +37,7 @@ export function preloader(done) {
 }
 
 export function mangoLink() {
-  const rows = D.querySelectorAll('.row[data-marks]'), maps = D.querySelectorAll('.mango-map');
+  const rows = Array.from(D.querySelectorAll('.row[data-marks]')), maps = D.querySelectorAll('.mango-map');
   const hl = (marks) => maps.forEach((m) => {
     m.querySelectorAll('.mn').forEach((n) => { n.classList.toggle('on', marks.includes(n.getAttribute('data-k'))); });
     m.classList.toggle('active', marks.length > 0);
@@ -47,6 +47,7 @@ export function mangoLink() {
     ['mouseenter', 'focus'].forEach((ev) => r.addEventListener(ev, () => hl(mk)));
     ['mouseleave', 'blur'].forEach((ev) => r.addEventListener(ev, () => hl([])));
   });
+  if (rows.length && (!W.matchMedia('(hover: hover)').matches || W.innerWidth <= 900)) followScroll(rows, hl);
   maps.forEach((m) => m.querySelectorAll('.mn').forEach((n) => {
     const k = n.getAttribute('data-k');
     n.addEventListener('mouseenter', () => {
@@ -55,6 +56,21 @@ export function mangoLink() {
     });
     n.addEventListener('mouseleave', () => { hl([]); rows.forEach((r) => r.classList.remove('lit')); });
   }));
+}
+
+function followScroll(rows, hl) {
+  const cap = D.querySelector('.mm-cap');
+  let cur = null;
+  const set = (r) => {
+    if (r === cur) return;
+    cur = r;
+    rows.forEach((x) => x.classList.toggle('lit', x === r));
+    hl(r ? r.getAttribute('data-marks').split(' ') : []);
+    if (cap) cap.textContent = r ? `${r.querySelector('.idx').textContent} · ${r.getAttribute('data-tag')}` : '';
+  };
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) set(e.target); }), { rootMargin: '-55% 0px -40% 0px' });
+  rows.forEach((r) => io.observe(r));
+  new IntersectionObserver((es) => { if (!es[0].isIntersecting) set(null); }).observe(rows[0].closest('.rows'));
 }
 
 export function initFicMap(navigate) {

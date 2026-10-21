@@ -5,7 +5,7 @@ import groups from '../data/groups.json';
 import photoSrc from '../assets/photo.jpg';
 import { getCases, picture, imgTag } from '../lib/cases.js';
 import { UI, homeUrl, caseUrl, assetUrl } from '../lib/i18n.js';
-import { mangoMap, mangoList, PATH } from '../lib/schemas.js';
+import { mangoMap, mangoMini, PATH } from '../lib/schemas.js';
 
 const { lang } = Astro.props;
 const t = (ru, en) => (lang === 'ru' ? ru : en);
@@ -92,7 +92,7 @@ const contactHref = (h) => (/^(mailto:|https?:)/.test(h) ? h : assetUrl(h));
             <p class="group-p">{g.text[lang]}</p>
           </div>
         </div>
-        <div class:list={['mg', { fmg: g.map === 'fic' }]}>
+        <div class:list={['mg', { fmg: g.map === 'fic', mgm: g.map === 'mango' }]}>
           <div class="mg-map">
             {g.map === 'fic' && (
               <div class="fmap rv">
@@ -111,7 +111,7 @@ const contactHref = (h) => (/^(mailto:|https?:)/.test(h) ? h : assetUrl(h));
                 </div>
               </div>
             )}
-            {g.map === 'mango' && <div class="map mango-map rv"><div class="map-l" set:html={mangoMap(lang, [], null, true)} /><Fragment set:html={mangoList(lang)} /></div>}
+            {g.map === 'mango' && <div class="map mango-map rv"><div class="map-l" set:html={mangoMap(lang, [], null, true)} /><Fragment set:html={mangoMini(lang)} /></div>}
             {g.hint && <p class="mono map-hint">{g.hint[lang]}</p>}
           </div>
           <ol class="rows">
@@ -119,7 +119,7 @@ const contactHref = (h) => (/^(mailto:|https?:)/.test(h) ? h : assetUrl(h));
               const l = c.local(lang);
               return (
                 <li><a class="row" href={caseUrl(lang, c.slug)} data-cursor="open" data-slug={c.slug}
-                  data-st={c.stops ? c.stops.join(',') : undefined} data-marks={c.marks ? c.marks.map((m) => (m === 'qm' ? 'platform' : m)).join(' ') : (c.schema === 'qm' ? 'platform' : undefined)}>
+                  data-st={c.stops ? c.stops.join(',') : undefined} data-marks={c.marks ? c.marks.map((m) => (m === 'qm' ? 'platform' : m)).join(' ') : (c.schema === 'qm' ? 'platform' : undefined)} data-tag={c.group === 'mango' ? l.tag : undefined}>
                   <span class="mono idx">{pad(c.n)}</span>
                   <span class="row-title">{c.titles[lang]}</span>
                   <span class="row-sub mono">{c.group === 'mango' ? l.kicker : l.meta}{l.chip && <span class="chip">{l.chip}</span>}{c.live?.length > 0 && <Fragment set:html={liveChip} />}</span>

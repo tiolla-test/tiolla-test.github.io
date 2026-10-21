@@ -115,4 +115,14 @@ export function qmList(lang, tag) {
   return `<div class="sm"><ol class="sm-list sm-flow">${items.join('')}</ol></div>`;
 }
 
+export function mangoMini(lang) {
+  const N = DATA.mango.nodes, T = DATA.mango[lang];
+  const chip = (k) => `<span class="mm-n mn" data-k="${k}">${N[k][lang][0]}</span>`;
+  return `<div class="mm" aria-hidden="true"><div class="mm-r">${chip('constructor')}</div>`
+    + `<div class="mm-r mm-3">${['voice', 'chat', 'admin'].map(chip).join('')}</div>`
+    + `<div class="mm-r mm-2">${['airobot', 'assistant'].map(chip).join('')}</div>`
+    + `<div class="mm-r"><span class="mm-n mm-base mn" data-k="platform">${T.platform.split(':')[0]}</span></div>`
+    + '<p class="mm-cap"></p></div>';
+}
+
 export const PATH = DATA.path;

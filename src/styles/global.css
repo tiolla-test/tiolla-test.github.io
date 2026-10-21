@@ -260,6 +260,23 @@ button { font: inherit; color: inherit; }
 .row:hover .row-arrow { transform: translateX(4px) rotate(-45deg); }
 .chip { display: inline-flex; align-items: center; font: 500 10.5px/1 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; border: 1px solid currentColor; border-radius: 999px; padding: 5px 9px 4px; white-space: nowrap; }
 @media (max-width: 900px) { .mg { grid-template-columns: minmax(0, 1fr); } .mg-map { position: static; } }
+.mm { display: none; }
+.mm-r { display: grid; gap: 6px; }
+.mm-r + .mm-r { margin-top: 6px; }
+.mm-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.mm-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.mm-n { display: flex; align-items: center; min-height: 34px; padding: 6px 8px; border: 1.2px solid var(--ink); border-radius: 4px; background: var(--paper); font: 600 12.5px/1.2 var(--f-body); hyphens: auto; transition: background .35s, border-color .35s, opacity .35s; }
+.mm-n.mm-base { border-color: transparent; background: var(--paper-3); font-weight: 500; color: var(--muted); }
+.mango-map.active .mm-n:not(.on) { opacity: .45; }
+.mm-n.on, .mm-n.mm-base.on { background: var(--accent); border-color: var(--accent); color: var(--ink); opacity: 1; }
+.m-full .mm-n.on { animation: mmPop .45s var(--ease-out); }
+@keyframes mmPop { 0% { transform: scale(.94); } 60% { transform: scale(1.03); } 100% { transform: none; } }
+.mm-cap { margin: 10px 0 0; min-height: 1.5em; font: 500 12px/1.5 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--accent-t); }
+@media (max-width: 600px) {
+  .mango-map .mm { display: block; }
+  .mgm > .mg-map { position: sticky; top: 76px; z-index: 3; }
+  .mgm .mango-map { box-shadow: 0 12px 24px -20px rgba(0, 0, 0, .6); }
+}
 
 /* ── цифры ─────────────────────────────────────────────────────────── */
 .nums { background: var(--ink); color: var(--cream); padding: clamp(84px, 11vw, 150px) var(--pad); }
@@ -447,7 +464,6 @@ figcaption b { color: var(--ink); font-weight: 600; }
 @media (max-width: 600px) {
   .schema-in, .mango-map .map-l { display: none; }
   .schema .sm { display: block; margin-bottom: 4px; }
-  .mango-map .sm { display: block; }
 }
 .colophon { margin: 0; padding-top: 20px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 14px; line-height: 1.6; max-width: 68ch; }
 .c-next { background: var(--ink); color: var(--cream); }
