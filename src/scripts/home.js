@@ -47,7 +47,13 @@ export function mangoLink() {
     ['mouseenter', 'focus'].forEach((ev) => r.addEventListener(ev, () => hl(mk)));
     ['mouseleave', 'blur'].forEach((ev) => r.addEventListener(ev, () => hl([])));
   });
-  if (rows.length && (!W.matchMedia('(hover: hover)').matches || W.innerWidth <= 900)) followScroll(rows, hl);
+  const cap = D.querySelector('.mango-map .mm-cap');
+  if (rows.length && touchLike()) {
+    followScroll(rows, (r) => {
+      hl(r ? r.getAttribute('data-marks').split(' ') : []);
+      if (cap) cap.textContent = r ? `${r.querySelector('.idx').textContent} · ${r.getAttribute('data-tag')}` : '';
+    });
+  }
   maps.forEach((m) => m.querySelectorAll('.mn').forEach((n) => {
     const k = n.getAttribute('data-k');
     n.addEventListener('mouseenter', () => {
@@ -58,15 +64,15 @@ export function mangoLink() {
   }));
 }
 
-function followScroll(rows, hl) {
-  const cap = D.querySelector('.mm-cap');
+const touchLike = () => !W.matchMedia('(hover: hover)').matches || W.innerWidth <= 900;
+
+function followScroll(rows, apply) {
   let cur = null;
   const set = (r) => {
     if (r === cur) return;
     cur = r;
     rows.forEach((x) => x.classList.toggle('lit', x === r));
-    hl(r ? r.getAttribute('data-marks').split(' ') : []);
-    if (cap) cap.textContent = r ? `${r.querySelector('.idx').textContent} · ${r.getAttribute('data-tag')}` : '';
+    apply(r);
   };
   const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) set(e.target); }), { rootMargin: '-55% 0px -40% 0px' });
   rows.forEach((r) => io.observe(r));
@@ -110,6 +116,17 @@ export function initFicMap(navigate) {
     r.addEventListener('mouseleave', () => light([], null));
     r.addEventListener('blur', () => light([], null));
   });
+  const cap = box.querySelector('.fmap-cap');
+  const stopName = (j) => sts[j].querySelector('text').textContent.replace(/^\d+\s*/, '');
+  if (rows.length && touchLike()) {
+    followScroll(rows, (r) => {
+      if (!r) { light([], null); if (cap) cap.textContent = ''; return; }
+      const list = forRow(r);
+      light(list, r.getAttribute('data-slug'));
+      moveTo(fr[list[list.length - 1]]);
+      if (cap) cap.textContent = `${r.querySelector('.idx').textContent} · ${list.map(stopName).join(' · ')}`;
+    });
+  }
   function pick(j) {
     light([j], sts[j].getAttribute('data-slug'));
     rows.forEach((r) => r.classList.toggle('lit', forRow(r).includes(j)));

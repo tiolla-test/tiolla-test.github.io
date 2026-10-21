@@ -106,6 +106,7 @@ const contactHref = (h) => (/^(mailto:|https?:)/.test(h) ? h : assetUrl(h));
                     <path d="M4 9 h16 v40 a8 8 0 0 1 -16 0 z" fill="rgba(244,240,232,.12)" stroke="#F4F0E8" stroke-width="2" />
                     <path d="M5.5 28 h13 v21 a6.5 6.5 0 0 1 -13 0 z" style="fill:var(--accent)" /></g></g></g>
                 </svg>
+                <p class="mm-cap fmap-cap" aria-hidden="true"></p>
                 <div class="fprev">
                   {list.filter((c) => c.cover).map((c, i) => <figure data-slug={c.slug} class={i === 0 ? 'on' : undefined} set:html={imgTag(c.images[c.cover], c.titles.ru, { zoom: false })} />)}
                 </div>

@@ -747,6 +747,13 @@ figcaption b { color: var(--ink); font-weight: 600; }
 .fmap.active .p-st:not(.on) { opacity: .4; }
 .fmap .p-st.on circle { fill: var(--accent); stroke: var(--accent); }
 .fmap .p-st.on text { fill: var(--cream); }
+.fmap-cap { display: none; margin: 0; color: var(--accent); }
+@media (max-width: 600px) {
+  .fmg > .mg-map { position: sticky; top: 76px; z-index: 3; }
+  .fmg .fmap { box-shadow: 0 12px 24px -20px rgba(0, 0, 0, .6); }
+  .fmg .fprev, .fmap .p-st text { display: none; }
+  .fmap-cap { display: block; }
+}
 .fprev { display: grid; }
 .fprev figure { grid-area: 1 / 1; margin: 0; visibility: hidden; }
 .fprev figure.on { visibility: visible; }
