@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import { homeUrl } from '../lib/i18n.js';
+---
+<Base lang="ru" page="error" title="Страница не найдена" altHref={homeUrl('en')}>
+<main id="main" class="nf">
+  <p class="mono nf-k">Ошибка 404 · Error 404</p>
+  <h1 class="display nf-t">Такой страницы нет</h1>
+  <p class="nf-p">Возможно, в адресе опечатка или страница переехала. Все кейсы собраны на главной.</p>
+  <p class="nf-p nf-en" lang="en">This page doesn’t exist. All case studies are on the home page.</p>
+  <div class="nf-act">
+    <a class="btn-round" href={homeUrl('ru')} data-magnetic>На главную<span class="arr" aria-hidden="true">→</span></a>
+    <a class="hero-link mono" href={homeUrl('en')} lang="en">Home page in English →</a>
+  </div>
+</main>
+</Base>

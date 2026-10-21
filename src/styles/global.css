@@ -787,3 +787,9 @@ figcaption b { color: var(--ink); font-weight: 600; }
 
 .cv .display, .about .display { font-size: clamp(2.2rem, 3.8vw, 4.4rem); overflow-wrap: break-word; }
 .wipe-in .wipe { transform: scaleY(1); transform-origin: 50% 0; }
+.nf { min-height: 100vh; display: grid; align-content: center; justify-items: start; gap: 22px; padding: 120px var(--pad) 72px; background: var(--ink); color: var(--cream); }
+.nf-k { margin: 0; color: var(--accent); }
+.nf-t { max-width: 12ch; }
+.nf-p { margin: 0; max-width: 46ch; color: color-mix(in srgb, var(--cream) 80%, var(--ink)); }
+.nf-en { color: var(--muted-d); }
+.nf-act { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 28px; margin-top: 12px; }

@@ -156,7 +156,7 @@ if (page === 'home') {
   };
   if (restoreY !== null || location.hash) { R.classList.remove('show-pre'); D.querySelector('.pre')?.remove(); R.classList.add('hero-ready'); intro(); }
   else preloader(intro);
-} else {
+} else if (page === 'case') {
   const art = D.querySelector('.case');
   initDemos(art);
   caseAnims(art);
