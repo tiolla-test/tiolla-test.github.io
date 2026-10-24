@@ -29,6 +29,14 @@ npm run build
 BASE_PATH=/portfolio npm run build
 ```
 
+Чтобы ссылка на сайт показывала в мессенджерах картинку и описание, перед сборкой укажите адрес сайта:
+
+```bash
+SITE_URL=https://example.ru npm run build
+```
+
+Без адреса сайт тоже работает, но в превью ссылок не будет картинки, а карта сайта для поисковиков получится без полных адресов. На GitHub Pages адрес подставляется сам.
+
 ## Адреса
 
 | Страница | Русский | Английский |
@@ -98,6 +106,7 @@ BASE_PATH=/portfolio npm run build
 | `src/data/schemas.json` | Подписи и координаты схем |
 | `src/assets/photo.jpg` | Фото на первом экране |
 | `public/resume.pdf` | Резюме для скачивания |
+| `public/favicon.svg`, `favicon.ico`, `apple-touch-icon.png` | Значок сайта во вкладке браузера и на экране телефона |
 
 ## Устройство кода
 

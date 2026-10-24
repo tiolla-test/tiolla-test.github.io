@@ -1,12 +1,23 @@
 ---
+import '@fontsource-variable/unbounded';
+import '@fontsource-variable/onest';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/500.css';
 import '../styles/global.css';
 import profile from '../data/profile.json';
-import { UI, homeUrl } from '../lib/i18n.js';
+import photoSrc from '../assets/photo.jpg';
+import { UI, homeUrl, assetUrl } from '../lib/i18n.js';
+import { ogImage } from '../lib/cases.js';
 
-const { lang, page, title, description, altHref } = Astro.props;
+const { lang, page, title, description, altHref, image } = Astro.props;
 const t = (ru, en) => (lang === 'ru' ? ru : en);
 const name = profile.name[lang];
 const fullTitle = title ? `${title} · ${name} · ${UI[lang].title}` : `${name} · ${UI[lang].title}`;
+const desc = description || UI[lang].description;
+/* links in previews and for search engines need full addresses; without SITE_URL they stay relative */
+const abs = (p) => (Astro.site ? new URL(p, Astro.site).href : p);
+const shareImg = image || await ogImage(photoSrc);
+const indexed = page !== 'error';
 const links = [
   ['work', 'Работы', 'Work'],
   ['about', 'Обо мне', 'About'],
@@ -26,12 +37,29 @@ const paletteHtml = '<div class="pal-list">' + profile.palettes.map((p) =>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{fullTitle}</title>
-<meta name="description" content={description || UI[lang].description}>
+<meta name="description" content={desc}>
 <meta name="theme-color" content="#0F0F0E">
-<link rel="alternate" hreflang={otherLang} href={altHref}>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300..900&family=Onest:wght@400..700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="icon" href={assetUrl('favicon.ico')} sizes="32x32">
+<link rel="icon" href={assetUrl('favicon.svg')} type="image/svg+xml">
+<link rel="apple-touch-icon" href={assetUrl('apple-touch-icon.png')}>
+{indexed ? (
+  <>
+    <link rel="canonical" href={abs(langHref[lang])}>
+    <link rel="alternate" hreflang="ru" href={abs(langHref.ru)}>
+    <link rel="alternate" hreflang="en" href={abs(langHref.en)}>
+    <link rel="alternate" hreflang="x-default" href={abs(langHref.ru)}>
+  </>
+) : <meta name="robots" content="noindex">}
+<meta property="og:type" content={page === 'case' ? 'article' : 'website'}>
+<meta property="og:site_name" content={`${name} · ${UI[lang].title}`}>
+<meta property="og:title" content={title || fullTitle}>
+<meta property="og:description" content={desc}>
+{indexed && <meta property="og:url" content={abs(langHref[lang])}>}
+<meta property="og:locale" content={lang === 'ru' ? 'ru_RU' : 'en_US'}>
+<meta property="og:image" content={abs(shareImg.src)}>
+<meta property="og:image:width" content={String(shareImg.width)}>
+<meta property="og:image:height" content={String(shareImg.height)}>
+<meta name="twitter:card" content="summary_large_image">
 <script is:inline>
 (function () {
   var R = document.documentElement, m = null, seen = null, th = null, wipe = null;
@@ -68,7 +96,7 @@ const paletteHtml = '<div class="pal-list">' + profile.palettes.map((p) =>
     {links.map(([id, ru, en]) => <a href={homeUrl(lang, '#' + id)}>{t(ru, en)}</a>)}
   </nav>
   <div class="tgl" role="group" aria-label="Язык / Language">
-    {['ru', 'en'].map((l) => <button type="button" data-lang-set={l} data-href={langHref[l]} aria-pressed={l === lang ? 'true' : 'false'}>{l.toUpperCase()}</button>)}
+    {['ru', 'en'].map((l) => <a href={langHref[l]} hreflang={l} lang={l} data-lang-set={l} aria-current={l === lang ? 'page' : undefined}>{l.toUpperCase()}</a>)}
   </div>
   <button type="button" class="mtg" aria-pressed="true">
     <span class="mtg-l">{t('Анимация', 'Motion')}</span><span class="sw" aria-hidden="true"><i></i></span>
@@ -83,7 +111,7 @@ const paletteHtml = '<div class="pal-list">' + profile.palettes.map((p) =>
   {links.map(([id, ru, en]) => <a href={homeUrl(lang, '#' + id)}>{t(ru, en)}</a>)}
   <div class="menu-set">
     <div class="tgl" role="group" aria-label="Язык / Language">
-      {['ru', 'en'].map((l) => <button type="button" data-lang-set={l} data-href={langHref[l]} aria-pressed={l === lang ? 'true' : 'false'}>{l.toUpperCase()}</button>)}
+      {['ru', 'en'].map((l) => <a href={langHref[l]} hreflang={l} lang={l} data-lang-set={l} aria-current={l === lang ? 'page' : undefined}>{l.toUpperCase()}</a>)}
     </div>
     <button type="button" class="mtg" aria-pressed="true">
       <span class="mtg-l">{t('Анимация', 'Motion')}</span><span class="sw" aria-hidden="true"><i></i></span>
@@ -94,7 +122,7 @@ const paletteHtml = '<div class="pal-list">' + profile.palettes.map((p) =>
 
 <slot />
 
-<div class="lb" hidden role="dialog" aria-modal="true" aria-label={t('Кадр', 'Image')}><button type="button" class="lb-x mono">{t('Закрыть', 'Close')} ✕</button><img alt=""></div>
+<div class="lb" hidden data-lenis-prevent role="dialog" aria-modal="true" aria-label={t('Кадр', 'Image')}><button type="button" class="lb-x mono">{t('Закрыть', 'Close')} ✕</button><img alt=""></div>
 
 <script src="../scripts/app.js"></script>
 </body>

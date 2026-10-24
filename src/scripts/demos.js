@@ -157,16 +157,22 @@ function demoForm(body, T) {
       setTimeout(function () { t.classList.remove('hl'); }, 1600);
     }
   }
+  /* render() rebuilds the markup, so focus goes back to the matching new element */
   body.addEventListener('click', function (e) {
     var q = e.target.closest('[data-q]');
-    if (q) { open = +q.getAttribute('data-q'); render(); return; }
+    if (q) { open = +q.getAttribute('data-q'); render(); nav.querySelector('[data-q="' + open + '"]').focus(); return; }
     if (e.target.closest('[data-to]')) { open = 2; render(true); }
   });
   body.addEventListener('input', function (e) {
     var inp = e.target.closest('input[data-f]');
     if (!inp) return;
     S[open].f[+inp.getAttribute('data-f')][1] = inp.value;
-    if (open === 2 && inp.getAttribute('data-f') === '1' && /^\d{4}$/.test(inp.value.trim()) && !fixed) { fixed = true; render(); }
+    if (open === 2 && inp.getAttribute('data-f') === '1' && /^\d{4}$/.test(inp.value.trim()) && !fixed) {
+      fixed = true; render();
+      var t = form.querySelector('[data-f="1"]');
+      t.focus({ preventScroll: true });
+      t.setSelectionRange(t.value.length, t.value.length);
+    }
   });
   render();
 }
@@ -224,8 +230,11 @@ export function initReel() {
   var reel = D.querySelector('.reel');
   if (!reel) return;
   var stage = reel.querySelector('.reel-stage'), tabs = reel.querySelectorAll('[data-sc]'), go = reel.querySelector('.reel-go'), bar = reel.querySelector('.reel-prog i');
-  var hrefs = JSON.parse(go.getAttribute('data-hrefs')), idx = 0, timers = [], seen = true, pending = false;
-  var play = full && !W.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var pauseBtn = reel.querySelector('.reel-pause');
+  var hrefs = JSON.parse(go.getAttribute('data-hrefs')), idx = 0, timers = [], seen = true, pending = false, paused = false;
+  var auto = full && !W.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* scenes move only while the show plays; paused or in calm mode each scene is drawn in its final state */
+  function moving() { return auto && !paused; }
   function clear() { timers.forEach(clearTimeout); timers = []; }
   function at(ms, fn) { timers.push(setTimeout(fn, ms)); }
   var CUR = '<svg class="rs-cur" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 2 L3 19 L8 14.5 L11.5 22 L14.5 20.6 L11 13.4 L17.5 13.4 Z" fill="#0F0F0E" stroke="#fff" stroke-width="1.4"/></svg>';
@@ -238,7 +247,7 @@ export function initReel() {
     function sticker(code, label) { stk.innerHTML = barcode(code) + '<b>' + code + '</b><small>' + label + '</small><i class="beam"></i>'; stk.classList.remove('scan'); void stk.offsetWidth; stk.classList.add('scan'); }
     function say(t, k) { toast.textContent = t; toast.className = 'rs-toast on' + (k ? ' ' + k : ''); }
     var N = 4;
-    if (!play) {
+    if (!moving()) {
       for (var k = 0; k < N; k++) { cells[k].className = 'lv-c placed'; cells[k].lastChild.textContent = String(4181 + k); }
       sticker('CSP' + (4780 + N), T.cap + ' A' + N); field.textContent = 'CSP' + (4780 + N); say(T.placed(N), 'ok');
       return 0;
@@ -264,7 +273,7 @@ export function initReel() {
     var sc = stage.querySelector('.rs'), cur = stage.querySelector('.rs-cur'), btn = stage.querySelector('.rs-to'), fld = stage.querySelector('.rs-in.flag'), ban = stage.querySelector('.rs-ban'), badge = stage.querySelector('.rs-nav i.bad');
     function place(el, dx, dy) { var r = el.getBoundingClientRect(), s = sc.getBoundingClientRect(); cur.style.transform = 'translate(' + (r.left - s.left + dx) + 'px,' + (r.top - s.top + dy) + 'px)'; }
     function done() { fld.classList.remove('flag', 'hl'); fld.textContent = '2019'; ban.className = 'rs-ban ok'; ban.innerHTML = '<b>' + T.ok + '</b><div class="rs-com"><span>' + T.done + ': ' + T.com + '</span></div>'; badge.className = ''; badge.textContent = '✓'; }
-    if (!play) { done(); cur.style.display = 'none'; return 0; }
+    if (!moving()) { done(); cur.style.display = 'none'; return 0; }
     var s0 = sc.getBoundingClientRect();
     cur.style.transform = 'translate(' + (s0.width - 40) + 'px,' + (s0.height - 40) + 'px)';
     at(450, function () { place(btn, btn.offsetWidth * 0.55, btn.offsetHeight * 0.55); });
@@ -289,7 +298,7 @@ export function initReel() {
       names.forEach(function (n, i) { var row = bars.children[i]; row.querySelector('.lv-fl').style.width = pct[i] + '%'; row.querySelector('.pc').textContent = pct[i] + ' %'; row.classList.toggle('win', i === best); });
       v.innerHTML = T.win(esc(names[best]), pct[best]);
     }
-    if (!play) { tx.textContent = phrase; result(); return 0; }
+    if (!moving()) { tx.textContent = phrase; result(); return 0; }
     var t = 400;
     for (var i = 1; i <= phrase.length; i++) (function (i) { at(t + i * 85, function () { tx.textContent = phrase.slice(0, i); }); })(i);
     t += phrase.length * 85 + 450;
@@ -299,22 +308,33 @@ export function initReel() {
   function show(i) {
     clear();
     idx = i;
-    tabs.forEach(function (b, j) { b.setAttribute('aria-selected', j === i ? 'true' : 'false'); });
+    tabs.forEach(function (b, j) { b.setAttribute('aria-pressed', j === i ? 'true' : 'false'); });
     go.setAttribute('href', hrefs[i]);
     var T = DT[lang];
     var dur = [function () { return rack(T.rack); }, function () { return form(T.form); }, function () { return ai(T.ai); }][i]();
     bar.style.transition = 'none';
-    bar.style.transform = 'scaleX(' + (play ? 0 : 1) + ')';
-    if (!play) return;
+    bar.style.transform = 'scaleX(' + (moving() ? 0 : 1) + ')';
+    if (!moving()) return;
     void bar.offsetWidth;
     bar.style.transition = 'transform ' + dur + 'ms linear';
     bar.style.transform = 'scaleX(1)';
     at(dur + 500, function () { if (seen) show((idx + 1) % 3); else pending = true; });
   }
   tabs.forEach(function (b, j) { b.addEventListener('click', function () { show(j); }); });
+  var PAUSE = { ru: ['Остановить показ', 'Запустить показ'], en: ['Pause', 'Play'] }[lang];
+  function syncPause() {
+    pauseBtn.setAttribute('aria-pressed', paused ? 'true' : 'false');
+    pauseBtn.setAttribute('aria-label', PAUSE[paused ? 1 : 0]);
+    pauseBtn.innerHTML = '<svg viewBox="0 0 12 12" aria-hidden="true">' + (paused ? '<path d="M3 1.5 L10.5 6 L3 10.5 Z"/>' : '<rect x="2" y="1.5" width="3" height="9" rx=".5"/><rect x="7" y="1.5" width="3" height="9" rx=".5"/>') + '</svg>';
+  }
+  if (auto) {
+    pauseBtn.hidden = false;
+    pauseBtn.addEventListener('click', function () { paused = !paused; pending = false; syncPause(); show(idx); });
+    syncPause();
+  }
   if ('IntersectionObserver' in W) new IntersectionObserver(function (es) {
     seen = es[0].isIntersecting;
-    if (seen && pending) { pending = false; show((idx + 1) % 3); }
+    if (seen && pending && !paused) { pending = false; show((idx + 1) % 3); }
   }).observe(reel);
   show(0);
 }

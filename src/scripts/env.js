@@ -16,14 +16,17 @@ export const fine = W.matchMedia('(hover: hover) and (pointer: fine)').matches;
 export const lang = R.getAttribute('data-lang') === 'en' ? 'en' : 'ru';
 export const page = R.getAttribute('data-page');
 
-let motion = R.classList.contains('m-full');
-if (motion && D.visibilityState === 'hidden') {
-  motion = false;
-  D.addEventListener('visibilitychange', () => { if (D.visibilityState === 'visible') location.reload(); });
-}
+const motion = R.classList.contains('m-full');
 if (!motion) { R.classList.remove('m-full', 'show-pre', 'wipe-in'); R.classList.add('m-calm'); }
 if (fine) R.classList.add('fine');
 export const full = motion;
+
+/* animations started in a background tab would play unseen, so the start waits until the tab is shown */
+export function whenVisible(fn) {
+  if (D.visibilityState !== 'hidden') { fn(); return; }
+  const on = () => { if (D.visibilityState === 'hidden') return; D.removeEventListener('visibilitychange', on); fn(); };
+  D.addEventListener('visibilitychange', on);
+}
 
 export let lenis = null;
 if (full && fine) {
@@ -43,10 +46,10 @@ export function scrollToEl(el, now) {
   scrollToY(Math.max(0, el.getBoundingClientRect().top + W.pageYOffset - 84), now);
 }
 
-export function split(el, mode) {
+export function split(el, mode, label = true) {
   if (el.__parts) return el.__parts;
   const text = el.textContent.replace(/\s+/g, ' ').trim(), parts = [];
-  el.setAttribute('aria-label', text);
+  if (label) el.setAttribute('aria-label', text);
   el.textContent = '';
   text.split(' ').forEach((w, i, a) => {
     const ws = D.createElement('span');

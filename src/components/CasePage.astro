@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import LiveBlock from './LiveBlock.astro';
-import { getCases, renderCase, imgTag } from '../lib/cases.js';
+import { getCases, renderCase, imgTag, ogImage } from '../lib/cases.js';
 import { UI, GROUPS, homeUrl, caseUrl } from '../lib/i18n.js';
 import { esc } from '../lib/schemas.js';
 
@@ -16,8 +16,12 @@ const local = c.local(d.lang);
 const kicker = c.group === 'mango' ? `${GROUPS.mango[lang]} · ${esc(local.kicker)}` : `${GROUPS.fic[lang]} · ${esc(local.meta)}`;
 const cover = c.cover && !c.live?.length ? imgTag(c.images[c.cover], d.title, { zoom: false, eager: true }) : '';
 const pad = (n) => String(n).padStart(2, '0');
+/* page description for search and link previews: the case lede as plain text, cut at a word */
+const plain = d.lede.replace(/<[^>]+>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+const description = plain.length > 200 ? plain.slice(0, 200).replace(/\s+\S*$/, '') + '…' : plain;
+const image = c.coverMeta ? await ogImage(c.coverMeta) : undefined;
 ---
-<Base lang={lang} page="case" title={d.title} altHref={caseUrl(lang === 'ru' ? 'en' : 'ru', slug)}>
+<Base lang={lang} page="case" title={d.title} description={description} image={image} altHref={caseUrl(lang === 'ru' ? 'en' : 'ru', slug)}>
 <main id="main" class="case-view">
 <article class="case" lang={d.lang} data-slug={slug}>
 <header class="c-head">

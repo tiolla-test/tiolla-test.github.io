@@ -52,16 +52,17 @@ const contactHref = (h) => (/^(mailto:|https?:)/.test(h) ? h : assetUrl(h));
     </div>
   </div>
   <div class="hero-vis h-anim">
-    <div class="reel" aria-label={t('Живой прототип из кейсов', 'Live prototype from the cases')}>
+    <div class="reel" role="group" aria-label={t('Живой прототип из кейсов', 'Live prototype from the cases')}>
       <div class="reel-bar">
         <span class="reel-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-        <div class="reel-tabs" role="tablist">
+        <div class="reel-tabs">
           {[['Штатив', 'Rack'], ['Анкета', 'Questionnaire'], ['AI-робот', 'AI robot']].map(([ru, en], i) =>
-            <button type="button" role="tab" data-sc={i} aria-selected={i === 0 ? 'true' : 'false'}>{t(ru, en)}</button>)}
+            <button type="button" data-sc={i} aria-pressed={i === 0 ? 'true' : 'false'}>{t(ru, en)}</button>)}
         </div>
+        <button type="button" class="reel-pause" hidden></button>
         <a class="reel-go mono" href={reelHrefs[0]} data-hrefs={JSON.stringify(reelHrefs)} data-cursor="open">{t('Кейс', 'Case')} →</a>
       </div>
-      <div class="reel-stage"></div>
+      <div class="reel-stage" aria-hidden="true"></div>
       <div class="reel-prog"><i></i></div>
     </div>
     <figure class="hero-photo" set:html={imgTag(photo, name, { zoom: false, eager: true })} />

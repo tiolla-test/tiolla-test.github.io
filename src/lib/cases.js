@@ -16,8 +16,15 @@ export async function picture(meta) {
   return imgCache.get(meta.src);
 }
 
+/* link previews: JPEG, since not every messenger shows WebP */
+export async function ogImage(meta) {
+  const img = await getImage({ src: meta, format: 'jpg', quality: 82, width: Math.min(1200, meta.width) });
+  const width = img.attributes.width ?? img.options.width;
+  return { src: img.src, width, height: img.attributes.height ?? Math.round(meta.height * (width / meta.width)) };
+}
+
 export function imgTag(p, alt, { cls = '', zoom = true, eager = false } = {}) {
-  return `<img src="${p.src}" width="${p.width}" height="${p.height}" alt="${esc(alt)}"${cls ? ` class="${cls}"` : ''}${zoom ? ' data-zoom' : ''} loading="${eager ? 'eager' : 'lazy'}" decoding="async">`;
+  return `<img src="${p.src}" width="${p.width}" height="${p.height}" alt="${esc(alt)}"${cls ? ` class="${cls}"` : ''}${zoom ? ' data-zoom tabindex="0" role="button" aria-haspopup="dialog"' : ''} loading="${eager ? 'eager' : 'lazy'}" decoding="async">`;
 }
 
 async function caseImages(slug) {
@@ -60,6 +67,7 @@ export async function getCases() {
   for (const [i, c] of list.entries()) {
     c.n = i + 1;
     c.images = await caseImages(c.slug);
+    c.coverMeta = c.cover ? IMAGES[`/src/content/cases/${c.slug}/${c.cover}`] : null;
     c.titles = {};
     for (const lang of ['ru', 'en']) {
       const e = c.entries[lang] || c.entries.ru;

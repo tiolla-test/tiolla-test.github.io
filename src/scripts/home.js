@@ -2,8 +2,9 @@ import { D, R, W, G, full, lenis, store, split } from './env.js';
 
 export function heroIntro() {
   if (!full) { R.classList.add('hero-ready'); return; }
-  const chars = [];
-  D.querySelectorAll('.hero-title .ht-line > span').forEach((sp) => { chars.push(...split(sp, 'chars')); });
+  const chars = [], title = D.querySelector('.hero-title');
+  title.setAttribute('aria-label', Array.from(title.querySelectorAll('.ht-line'), (l) => l.textContent.trim()).join(' '));
+  title.querySelectorAll('.ht-line > span').forEach((sp) => { chars.push(...split(sp, 'chars', false)); });
   G.set(chars, { yPercent: 118 });
   const rest = D.querySelectorAll('.hero-kick, .hero-sub, .hero-facts, .hero-act, .hero-vis');
   G.set(rest, { opacity: 0, y: 24 });
@@ -20,20 +21,11 @@ export function preloader(done) {
   const num = pre.querySelector('.pre-num'), bar = pre.querySelector('.pre-bar i'), o = { v: 0 };
   if (lenis) lenis.stop();
   const paint = () => { num.textContent = String(Math.round(o.v)).padStart(3, '0'); bar.style.transform = `scaleX(${o.v / 100})`; };
-  const fonts = D.fonts && D.fonts.ready ? D.fonts.ready : Promise.resolve();
-  const cap = new Promise((r) => setTimeout(r, 2200));
-  G.to(o, {
-    v: 82, duration: 0.75, ease: 'power2.inOut', onUpdate: paint,
-    onComplete: () => {
-      Promise.race([fonts, cap]).then(() => {
-        G.timeline()
-          .to(o, { v: 100, duration: 0.3, ease: 'power2.out', onUpdate: paint })
-          .to(pre, { yPercent: -100, duration: 0.9, ease: 'power4.inOut' }, '+=0.08')
-          .add(done, '-=0.6')
-          .add(() => { R.classList.remove('show-pre'); pre.remove(); if (lenis) lenis.start(); });
-      });
-    },
-  });
+  G.timeline()
+    .to(o, { v: 100, duration: 1.05, ease: 'power2.inOut', onUpdate: paint })
+    .to(pre, { yPercent: -100, duration: 0.9, ease: 'power4.inOut' }, '+=0.08')
+    .add(done, '-=0.6')
+    .add(() => { R.classList.remove('show-pre'); pre.remove(); if (lenis) lenis.start(); });
 }
 
 export function mangoLink() {
