@@ -17,6 +17,16 @@ export function caseAnims(art) {
   drawSvgs(art);
 }
 
+/* on a phone the project facts and the contents start folded, so the case text begins sooner;
+   the markup is open, so without JavaScript nothing is hidden */
+export function setupFolds(art) {
+  const btns = art.querySelectorAll('.fold-btn');
+  if (W.matchMedia('(max-width: 600px)').matches) btns.forEach((b) => b.setAttribute('aria-expanded', 'false'));
+  btns.forEach((b) => b.addEventListener('click', () => {
+    b.setAttribute('aria-expanded', b.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');
+  }));
+}
+
 export function setupToc(art) {
   const links = {};
   art.querySelectorAll('.toc a').forEach((a) => { links[a.getAttribute('data-sec')] = a; });

@@ -4,7 +4,7 @@ import profile from '../data/profile.json';
 import groups from '../data/groups.json';
 import photoSrc from '../assets/photo.jpg';
 import { getCases, picture, imgTag } from '../lib/cases.js';
-import { UI, homeUrl, caseUrl, assetUrl } from '../lib/i18n.js';
+import { UI, homeUrl, caseUrl, assetUrl, plural } from '../lib/i18n.js';
 import { mangoMap, mangoMini, PATH } from '../lib/schemas.js';
 
 const { lang } = Astro.props;
@@ -18,19 +18,20 @@ const total = cases.length;
 
 const ficStations = PATH.points.map(([x, y], i) => ({ x, y, i, ty: y > 200 ? y + 74 : y - 50, label: PATH.labels[lang][i], slug: PATH.slugs[i], href: caseUrl(lang, PATH.slugs[i]) }));
 const reelHrefs = ['aliquot-station', 'participant-portal', 'ai-robot'].map((s) => caseUrl(lang, s));
-const facts = [[6, 'лет в B2B-интерфейсах', 'years in B2B interfaces'], [total, 'кейсов целиком', 'full case studies'], [3, 'живых прототипа', 'live prototypes']];
+/* facts and numbers live in profile.json; case and prototype counts come from the cases themselves */
+const liveCount = new Set(cases.flatMap((c) => c.live || [])).size;
+const facts = [['years', profile.facts.years], ['cases', total], ['live', liveCount]]
+  .map(([k, n]) => [n, plural(lang, n, profile.facts.labels[k][lang])]);
 const marquee = [['Постановка задач', 'Problem framing'], ['Пользовательские пути', 'User flows'], ['Продуктовая логика', 'Product logic'], ['Интерфейс', 'Interface'],
   ['Прототип', 'Prototyping'], ['Дизайн-система', 'Design system'], ['Исследования', 'Research'], ['Анализ рынка', 'Market analysis'], ['Сопровождение разработки', 'Development support']];
-const nums = [
-  { v: 20000, text: ['визитов за двухлетний цикл при 4000 участников', 'visits over a two-year cycle with 4,000 participants'], slug: 'participant-portal', link: ['Кабинет участника', 'Participant portal'] },
-  { v: 16000, text: ['подписаний и проверок убрало согласие, подписанное один раз', 'signatures and checks removed by a consent signed once'], slug: 'participant-portal', link: ['Кабинет участника', 'Participant portal'] },
-  { v: 39290, text: ['строк отклонил импорт в базу биобанка, три четверти из них дубликаты', 'rows rejected by the biobank import, three quarters of them duplicates'], slug: 'aliquot-station', link: ['Станция аликвот', 'Aliquot station'] },
-];
+for (const x of profile.numbers) {
+  if (!cases.some((c) => c.slug === x.case)) throw new Error(`profile.json, numbers: нет кейса «${x.case}» в src/content/cases`);
+}
 const fmt = (v) => v.toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-US');
 const contactHref = (h) => (/^(mailto:|https?:)/.test(h) ? h : assetUrl(h));
 ---
 <Base lang={lang} page="home" altHref={homeUrl(lang === 'ru' ? 'en' : 'ru')}>
-<div id="home">
+<main id="home">
 
 <section class="hero" aria-labelledby="hero-t">
   <div class="glow" aria-hidden="true"></div>
@@ -44,7 +45,7 @@ const contactHref = (h) => (/^(mailto:|https?:)/.test(h) ? h : assetUrl(h));
     <p class="hero-sub h-anim">{t('ФИЦ Биомед и MANGO OFFICE: исследования, постановка задач, интерфейсы, прототипы и дизайн-системы. Прототипы из кейсов здесь играют сами, а внутри кейсов их можно потрогать.',
       'FIC Biomed and MANGO OFFICE: research, problem framing, interfaces, prototypes and design systems. Prototypes from the cases play here by themselves, and inside the cases you can try them.')}</p>
     <ul class="hero-facts h-anim">
-      {facts.map(([n, ru, en]) => <li><b>{n}</b><span>{t(ru, en)}</span></li>)}
+      {facts.map(([n, label]) => <li><b>{n}</b><span>{label}</span></li>)}
     </ul>
     <div class="hero-act h-anim">
       <a class="btn-round" href="#work" data-magnetic>{t('Смотреть работы', 'See the work')}<span class="arr" aria-hidden="true">↓</span></a>
@@ -139,10 +140,10 @@ const contactHref = (h) => (/^(mailto:|https?:)/.test(h) ? h : assetUrl(h));
 <section class="nums" aria-labelledby="nums-t">
   <p class="mono rv" id="nums-t">{t('В цифрах', 'In numbers')}</p>
   <div class="nums-grid">
-    {nums.map((x) => (
+    {profile.numbers.map((x) => (
       <div class="num rv">
-        <span class="num-v" data-count={x.v}>{fmt(x.v)}</span>
-        <p>{t(...x.text)}</p><a class="mono" href={caseUrl(lang, x.slug)}>{t(...x.link)} →</a>
+        <span class="num-v" data-count={x.value}>{fmt(x.value)}</span>
+        <p>{x.text[lang]}</p><a class="mono" href={caseUrl(lang, x.case)}>{x.link[lang]} →</a>
       </div>
     ))}
   </div>
@@ -201,11 +202,10 @@ const contactHref = (h) => (/^(mailto:|https?:)/.test(h) ? h : assetUrl(h));
   </ul>
   <footer class="foot mono">
     <span>© 2026 {name}</span>
-    <span class="foot-c">{t('Сайт собран 16 октября 2026 г. из текстов кейсов. Английский текст переведён с помощью ИИ. Данные на экранах прототипов вымышленные.',
-      'Built on 16 October 2026 from the case study texts. The English text was translated with AI. Data on prototype screens is fictional.')}</span>
+    <span class="foot-c">{profile.footer[lang]}</span>
     <a href="#" class="to-top">{t('Наверх', 'Back to top')} ↑</a>
   </footer>
 </section>
 
-</div>
+</main>
 </Base>

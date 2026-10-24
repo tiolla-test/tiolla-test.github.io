@@ -32,12 +32,14 @@ const image = c.coverMeta ? await ogImage(c.coverMeta) : undefined;
 </header>
 {c.live?.length > 0 && <LiveBlock kinds={c.live} lang={lang} />}
 {cover && <figure class="c-cover rv-cover" set:html={cover} />}
-<dl class="dossier">
+<button type="button" class="fold-btn mono" aria-expanded="true" aria-controls="c-dossier">{u.about}</button>
+<dl class="dossier" id="c-dossier">
   {d.dossier.map((x) => <div class={x.wide ? 'wide' : ''}><dt set:html={x.label} /><dd set:html={x.wide ? x.value.replaceAll(' · ', '<br>') : x.value} /></div>)}
 </dl>
 {d.note && <div class="c-note rv" set:html={d.note} />}
 <div class="c-body">
-  <nav class="toc" aria-label={u.toc}><p class="mono">{u.toc}</p><ol>
+  <nav class="toc" aria-label={u.toc}><p class="mono">{u.toc}</p>
+    <button type="button" class="fold-btn mono" aria-expanded="true" aria-controls="c-toc">{u.toc} · {d.sections.length}</button><ol id="c-toc">
     {d.sections.map((s, k) => <li><a href={`#c-s${k + 1}`} data-sec={`c-s${k + 1}`} set:html={s.title} /></li>)}
   </ol></nav>
   <div class="c-content">

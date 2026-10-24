@@ -15,6 +15,65 @@
     "ru": "Полная или частичная занятость, проекты · в офисе, удалённо или гибрид",
     "en": "Full-time, part-time or project work · on-site, remote or hybrid"
   },
+  "facts": {
+    "years": 6,
+    "labels": {
+      "years": {
+        "ru": ["год в B2B-интерфейсах", "года в B2B-интерфейсах", "лет в B2B-интерфейсах"],
+        "en": ["year in B2B interfaces", "years in B2B interfaces"]
+      },
+      "cases": {
+        "ru": ["кейс целиком", "кейса целиком", "кейсов целиком"],
+        "en": ["full case study", "full case studies"]
+      },
+      "live": {
+        "ru": ["живой прототип", "живых прототипа", "живых прототипов"],
+        "en": ["live prototype", "live prototypes"]
+      }
+    }
+  },
+  "numbers": [
+    {
+      "value": 20000,
+      "case": "participant-portal",
+      "text": {
+        "ru": "визитов за двухлетний цикл при 4000 участников",
+        "en": "visits over a two-year cycle with 4,000 participants"
+      },
+      "link": {
+        "ru": "Кабинет участника",
+        "en": "Participant portal"
+      }
+    },
+    {
+      "value": 16000,
+      "case": "participant-portal",
+      "text": {
+        "ru": "подписаний и проверок убрало согласие, подписанное один раз",
+        "en": "signatures and checks removed by a consent signed once"
+      },
+      "link": {
+        "ru": "Кабинет участника",
+        "en": "Participant portal"
+      }
+    },
+    {
+      "value": 39290,
+      "case": "aliquot-station",
+      "text": {
+        "ru": "строк отклонил импорт в базу биобанка, три четверти из них дубликаты",
+        "en": "rows rejected by the biobank import, three quarters of them duplicates"
+      },
+      "link": {
+        "ru": "Станция аликвот",
+        "en": "Aliquot station"
+      }
+    }
+  ],
+  "footer": {
+    "ru": "Данные на экранах прототипов вымышленные.",
+    "en": "Data on prototype screens is fictional."
+  },
   "skills": {
     "ru": [
       "Figma",

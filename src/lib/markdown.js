@@ -50,7 +50,8 @@ function table(lines, ctx) {
   const [head, ...body] = rows;
   const num = body.length > 0 && body.every((r) => /^[\d\s.,%–-]+$/.test(r[r.length - 1] || 'x'));
   const cell = (tag, i, n, c) => `<${tag}${num && i === n - 1 ? ' class=num' : ''}>${inline(c, ctx)}</${tag}>`;
-  const th = head.map((c, i) => cell('th', i, head.length, c)).join('');
+  /* an empty header cell is not a header: it stays a plain cell, so screen readers do not announce a blank heading */
+  const th = head.map((c, i) => cell(c ? 'th' : 'td', i, head.length, c)).join('');
   const tb = body.map((r) => '<tr>' + r.map((c, i) => cell('td', i, r.length, c)).join('') + '</tr>').join('');
   return `<div class="tbl rv"><table><thead><tr>${th}</tr></thead><tbody>${tb}</tbody></table></div>`;
 }
@@ -65,19 +66,20 @@ function figures(b, ctx) {
 
 const leadLabel = (b) => { const m = b.match(/^\*\*([^*]+?)\.\*\*\s*/); return m ? m[1] : null; };
 
-export function renderBlocks(bs, title, ctx) {
+export function renderBlocks(bs, title, ctx, file = 'кейс') {
   const out = [], lessons = [];
   const flush = () => { if (lessons.length) { out.push('<div class="lessons">' + lessons.join('') + '</div>'); lessons.length = 0; } };
   for (let i = 0; i < bs.length; i++) {
     const b = bs[i];
     if (LESSONS.has(title) && b.startsWith('**')) {
       const m = b.match(/^\*\*(.+?)\*\*\s*([\s\S]*)$/);
-      lessons.push(`<div class="lesson rv"><h4>${inline(m[1].replace(/\.+$/, ''), ctx)}</h4><p>${inline(m[2], ctx)}</p></div>`);
+      if (!m) fail(file, `в разделе «${title}» вывод должен начинаться с «**Вывод.** текст»: ${b.slice(0, 60)}`);
+      lessons.push(`<div class="lesson rv"><h3>${inline(m[1].replace(/\.+$/, ''), ctx)}</h3><p>${inline(m[2], ctx)}</p></div>`);
       continue;
     }
     flush();
     if (b.startsWith('```')) {
-      out.push(`<pre><code>${escText(b.split('\n').slice(1, -1).join('\n'))}</code></pre>`);
+      out.push(`<pre tabindex="0"><code>${escText(b.split('\n').slice(1, -1).join('\n'))}</code></pre>`);
     } else if (b.startsWith('### ')) {
       out.push(`<h3>${inline(b.slice(4), ctx)}</h3>`);
     } else if (b.startsWith('*Схема')) {
@@ -115,27 +117,37 @@ export function briefHtml(bs, figs, ctx) {
   return out;
 }
 
-export function parseCase(text) {
+/* a mistake in a case text stops the build with the file name and what to fix */
+function fail(file, msg) { throw new Error(`${file}: ${msg}`); }
+
+/* colophon: one italic paragraph after a closing --- at the very end of the case */
+const COLOPHON = /\n---\s*\n+\*([^*][\s\S]*?[^*])\*\s*$/;
+
+export function parseCase(text, file = 'кейс') {
   const cut = text.indexOf('\n## ');
-  const head = text.slice(0, cut), body = text.slice(cut + 1);
+  if (cut < 0) fail(file, 'нет ни одного раздела «## …»');
+  const head = text.slice(0, cut);
+  let body = text.slice(cut + 1), colophon = '';
+  const col = body.match(COLOPHON);
+  if (col) { colophon = col[1].replace(/\s*\n\s*/g, ' '); body = body.slice(0, col.index); }
   const parts = head.split(/\n---\n/).map((p) => p.trim()).filter(Boolean);
+  if (!parts.length) fail(file, 'перед первым разделом нет названия, вводного абзаца и строки о роли');
   const top = blocks(parts[0]);
+  if (!top[0] || !top[0].startsWith('# ')) fail(file, 'кейс должен начинаться с названия «# …»');
+  if (top.length < 3) fail(file, 'после названия нужны вводный абзац и строка с ролью и местом работы');
   const dossier = [];
   for (const b of parts.length > 1 ? blocks(parts[1]) : []) {
     const m = b.match(/^\*\*(.+?)\.\*\*\s*([\s\S]*)$/);
     if (m) dossier.push([m[1], m[2]]);
   }
   const sections = [];
-  let colophon = '';
   for (let p of body.split(/\n(?=## )/)) {
     p = p.replace(/^## /, '');
     const nl = p.indexOf('\n');
     const title = (nl < 0 ? p : p.slice(0, nl)).trim();
+    if (!title) fail(file, 'у раздела «## » нет названия');
     const raw = nl < 0 ? '' : p.slice(nl + 1);
-    const bs = blocks(raw);
-    const last = bs.length ? bs[bs.length - 1].replace(/\n/g, ' ') : '';
-    if (/^\*[^*].{118,}[^*]\*$/.test(last)) colophon = bs.pop().slice(1, -1);
-    sections.push({ title, raw: raw.trim(), blocks: bs });
+    sections.push({ title, raw: raw.trim(), blocks: blocks(raw) });
   }
   return { title: top[0].slice(2).trim(), lede: top[1], byline: top[2], dossier, sections, colophon };
 }

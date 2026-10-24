@@ -10,19 +10,26 @@ export function caseUrl(lang, slug, hash = '') {
   return `${BASE}${lang === 'en' ? '/en' : ''}/cases/${slug}/${hash}`;
 }
 
+/* plural form: Russian takes [1, 2–4, 5 and more], English takes [1, other] */
+export function plural(lang, n, forms) {
+  if (lang === 'en') return forms[n === 1 ? 0 : 1];
+  const m10 = n % 10, m100 = n % 100;
+  return forms[m10 === 1 && m100 !== 11 ? 0 : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? 1 : 2];
+}
+
 export function assetUrl(path) {
   return `${BASE}/${path}`;
 }
 
 export const UI = {
   ru: {
-    all: 'Все работы', toc: 'Разделы', next: 'Следующий кейс', first: 'К первому кейсу',
+    all: 'Все работы', toc: 'Разделы', about: 'О проекте', next: 'Следующий кейс', first: 'К первому кейсу',
     live: 'Живой прототип', lives: 'Живые прототипы', liveChip: 'живой прототип',
     title: 'продуктовый дизайнер',
     description: 'Продуктовый дизайнер: медицинская информационная система ФИЦ Биомед и конструктор роботов MANGO OFFICE.',
   },
   en: {
-    all: 'All work', toc: 'Contents', next: 'Next case', first: 'Back to the first case',
+    all: 'All work', toc: 'Contents', about: 'About the project', next: 'Next case', first: 'Back to the first case',
     live: 'Live prototype', lives: 'Live prototypes', liveChip: 'live prototype',
     title: 'product designer',
     description: 'Product designer: the FIC Biomed medical information system and the MANGO OFFICE robot builder.',

@@ -2,7 +2,7 @@ import { D, R, W, G, ST, full, page, lenis, store, scrollToY, scrollToEl, whenVi
 import { reveals, drawSvgs, counters, magnetic, cursor } from './effects.js';
 import { initDemos, initReel } from './demos.js';
 import { heroIntro, preloader, mangoLink, initFicMap } from './home.js';
-import { caseAnims, setupToc, currentSec, readingProgress } from './case.js';
+import { caseAnims, setupToc, setupFolds, currentSec, readingProgress } from './case.js';
 
 /* page transitions: the accent wipe covers the screen, the next page opens it again */
 const wipeEl = D.querySelector('.wipe');
@@ -203,6 +203,7 @@ function start() {
   } else if (page === 'case') {
     const art = D.querySelector('.case');
     initDemos(art);
+    setupFolds(art);
     caseAnims(art);
     setupToc(art);
     readingProgress();

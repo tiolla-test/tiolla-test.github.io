@@ -40,7 +40,7 @@ function labelTables(html) {
   return html.replace(/<table>([\s\S]*?)<\/table>/g, (m, inner) => {
     const head = inner.match(/<thead>([\s\S]*?)<\/thead>/);
     if (!head) return m;
-    const labels = [...head[1].matchAll(/<th[^>]*>([\s\S]*?)<\/th>/g)].map((x) => x[1].replace(/<[^>]+>/g, '').trim());
+    const labels = [...head[1].matchAll(/<t[hd][^>]*>([\s\S]*?)<\/t[hd]>/g)].map((x) => x[1].replace(/<[^>]+>/g, '').trim());
     const rows = inner.replace(/<tr>([\s\S]*?)<\/tr>/g, (tr, cells) => {
       let i = 0;
       return '<tr>' + cells.replace(/<td(\s[^>]*)?>/g, (td, attrs = '') => `<td${attrs} data-label="${esc(labels[i++] || '')}">`) + '</tr>';
@@ -60,8 +60,12 @@ export async function getCases() {
     (bySlug[slug] ??= { slug })[lang] = e;
   }
   const list = Object.values(bySlug).filter((c) => c.ru)
-    .map((c) => ({ ...c.ru.data, slug: c.slug, entries: { ru: c.ru, en: c.en?.body?.trim() ? c.en : null }, labels: { ru: c.ru.data, en: c.en?.data || {} } }))
-    .filter((c) => groups.some((g) => g.id === c.group));
+    .map((c) => ({ ...c.ru.data, slug: c.slug, entries: { ru: c.ru, en: c.en?.body?.trim() ? c.en : null }, labels: { ru: c.ru.data, en: c.en?.data || {} } }));
+  for (const c of list) {
+    if (!groups.some((g) => g.id === c.group)) {
+      throw new Error(`src/content/cases/${c.slug}/ru.md: group «${c.group ?? ''}» нет в src/data/groups.json (есть: ${groups.map((g) => g.id).join(', ')})`);
+    }
+  }
   const groupIndex = (c) => groups.findIndex((g) => g.id === c.group);
   list.sort((a, b) => groupIndex(a) - groupIndex(b) || (a.order ?? 999) - (b.order ?? 999));
   for (const [i, c] of list.entries()) {
@@ -71,7 +75,7 @@ export async function getCases() {
     c.titles = {};
     for (const lang of ['ru', 'en']) {
       const e = c.entries[lang] || c.entries.ru;
-      c.titles[lang] = parseCase(e.body).title;
+      c.titles[lang] = parseCase(e.body, `src/content/cases/${c.slug}/${c.entries[lang] ? lang : 'ru'}.md`).title;
     }
     c.local = (lang) => ({ ...c.labels.ru, ...(c.labels[lang] || {}) });
   }
@@ -82,13 +86,18 @@ export async function getCases() {
 export async function renderCase(c, lang) {
   const entry = c.entries[lang] || c.entries.ru;
   const contentLang = c.entries[lang] ? lang : 'ru';
+  const file = `src/content/cases/${c.slug}/${contentLang}.md`;
   const data = c.local(contentLang);
-  const d = parseCase(entry.body);
+  const d = parseCase(entry.body, file);
+  const slugs = new Set((await getCases()).map((x) => x.slug));
   const ctx = {
-    caseHref: (slug) => caseUrl(lang, slug),
+    caseHref: (slug) => {
+      if (!slugs.has(slug)) throw new Error(`${file}: ссылка «case:${slug}» ведёт на кейс, которого нет в src/content/cases`);
+      return caseUrl(lang, slug);
+    },
     img: (src, alt) => {
       const p = c.images[src];
-      if (!p) throw new Error(`${c.slug}: no image ${src}`);
+      if (!p) throw new Error(`${file}: нет кадра ${src} в папке img`);
       return imgTag(p, alt);
     },
     schema: () => {
@@ -109,7 +118,7 @@ export async function renderCase(c, lang) {
     let body;
     if (isHtml) body = htmlImg(s.raw);
     else if (BRIEF.has(s.title)) body = briefHtml(s.blocks, data.figures, ctx);
-    else body = renderBlocks(s.blocks, s.title, ctx);
+    else body = renderBlocks(s.blocks, s.title, ctx, file);
     return { title: s.title.includes('<') ? s.title : inline(s.title, ctx), brief: BRIEF.has(s.title), lessons: LESSONS.has(s.title), body: labelTables(body) };
   });
   return {
