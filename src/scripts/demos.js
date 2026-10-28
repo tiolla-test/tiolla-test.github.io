@@ -2,7 +2,7 @@ import { D, W, full, fine, lang, scrollToEl, esc } from './env.js';
 
 const DT = {
   ru: {
-    rack: { field: 'Поле сканера', ph: 'Например LVL4181 и Enter', stickers: 'Наклейки на столе: щёлкните, чтобы отсканировать', tube: 'Пробирка', cap: 'Крышка', foreign: 'Чужая пробирка',
+    rack: { field: 'Поле сканера', ph: 'Например LVL4181 и Enter', stickers: 'Наклейки на столе: нажмите, чтобы отсканировать', tube: 'Пробирка', cap: 'Крышка', foreign: 'Чужая пробирка',
       place: 'Разместить готовые', reset: 'Сначала', legend: ['Резерв', 'Нужен CSP', 'Готов', 'Размещён'],
       bad: 'Неверный штрихкод: должен начинаться с LVL или CSP', full: 'Серия заполнена. Нажмите «Разместить готовые»',
       lvlOk: function (p, c) { return p + ': ' + c + ' привязан. Теперь CSP с крышки'; }, ready: function (p) { return p + ': оба кода привязаны, статус «Готов»'; },
@@ -22,7 +22,7 @@ const DT = {
       lose: 'Ни одна категория не набрала 30 %. Сработает поиск по <b>ключевым словам</b>, а если и он ничего не найдёт, ветка «Любой вопрос».' }
   },
   en: {
-    rack: { field: 'Scanner field', ph: 'For example LVL4181 and Enter', stickers: 'Stickers on the bench: click to scan', tube: 'Tube', cap: 'Cap', foreign: 'Someone else’s tube',
+    rack: { field: 'Scanner field', ph: 'For example LVL4181 and Enter', stickers: 'Stickers on the bench: select one to scan', tube: 'Tube', cap: 'Cap', foreign: 'Someone else’s tube',
       place: 'Place ready ones', reset: 'Start over', legend: ['Reserve', 'CSP needed', 'Ready', 'Placed'],
       bad: 'Wrong barcode: must start with LVL or CSP', full: 'The series is full. Press “Place ready ones”',
       lvlOk: function (p, c) { return p + ': ' + c + ' linked. Now the CSP from the cap'; }, ready: function (p) { return p + ': both codes linked, status “Ready”'; },

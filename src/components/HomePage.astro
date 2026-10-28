@@ -17,7 +17,13 @@ const liveChip = `<span class="chip chip-live">${UI[lang].liveChip}</span>`;
 const total = cases.length;
 
 const ficStations = PATH.points.map(([x, y], i) => ({ x, y, i, ty: y > 200 ? y + 74 : y - 50, label: PATH.labels[lang][i], slug: PATH.slugs[i], href: caseUrl(lang, PATH.slugs[i]) }));
-const reelHrefs = ['aliquot-station', 'participant-portal', 'ai-robot'].map((s) => caseUrl(lang, s));
+const reelSlugs = ['aliquot-station', 'participant-portal', 'ai-robot'];
+/* case addresses written in code: a renamed case folder stops the build here instead of leaving a dead link */
+const known = new Set(cases.map((c) => c.slug));
+for (const [where, list] of [['проигрыватель, reelSlugs в HomePage.astro', reelSlugs], ['путь образца, path.slugs в src/data/schemas.json', PATH.slugs]]) {
+  for (const s of list) if (!known.has(s)) throw new Error(`${where}: нет кейса «${s}» в src/content/cases`);
+}
+const reelHrefs = reelSlugs.map((s) => caseUrl(lang, s));
 /* facts and numbers live in profile.json; case and prototype counts come from the cases themselves */
 const liveCount = new Set(cases.flatMap((c) => c.live || [])).size;
 const facts = [['years', profile.facts.years], ['cases', total], ['live', liveCount]]
@@ -101,7 +107,7 @@ const contactHref = (h) => (/^(mailto:|https?:)/.test(h) ? h : assetUrl(h));
                 <svg class="p-route" viewBox="0 0 1200 520" aria-label={t('Путь образца через систему', 'The sample’s path through the system')}>
                   <path class="p-base" d={PATH.d} /><path class="p-done" d={PATH.d} /><path class="p-hit" d={PATH.d} />
                   {ficStations.map((s) => (
-                    <g class="p-st" data-i={s.i} data-slug={s.slug} data-href={s.href}><circle cx={s.x} cy={s.y} r="17" /><text x={s.x} y={s.ty} text-anchor="middle">{s.label}</text></g>
+                    <g class="p-st" data-i={s.i} data-slug={s.slug} data-href={s.href}><circle cx={s.x} cy={s.y} r="17" /><rect class="p-st-hit" x={s.x - 85} y={s.y - 85} width="170" height="170" /><text x={s.x} y={s.ty} text-anchor="middle">{s.label}</text></g>
                   ))}
                   <g class="p-tube" data-cursor="drag"><g transform="scale(1.7)"><circle class="p-glow" r="26" />
                     <g transform="translate(-12,-62)"><rect x="1" y="0" width="22" height="9" rx="2" fill="#F4F0E8" />

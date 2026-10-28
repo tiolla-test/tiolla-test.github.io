@@ -45,8 +45,8 @@ export const LIVE_TAB = { rack: { ru: 'Штатив', en: 'Rack' }, form: { ru: 
 
 export const DEMO_TXT = {
   rack: {
-    ru: ['Отсканируйте пробирку', 'Сканер подключается к компьютеру как клавиатура: печатает код и нажимает Enter. Щёлкните по наклейке со штрихкодом или введите код в поле сканера.'],
-    en: ['Scan a tube', 'A scanner connects to the computer as a keyboard: it types the code and presses Enter. Click a barcode sticker or type a code into the scanner field.'],
+    ru: ['Отсканируйте пробирку', 'Сканер подключается к компьютеру как клавиатура: печатает код и нажимает Enter. Нажмите на наклейку со штрихкодом или введите код в поле сканера.'],
+    en: ['Scan a tube', 'A scanner connects to the computer as a keyboard: it types the code and presses Enter. Select a barcode sticker or type a code into the scanner field.'],
   },
   form: {
     ru: ['Исправьте поле по замечанию', 'Врач вернул анкету с одним замечанием. Нажмите «К полю», впишите год, и замечание снимется само. Данные вымышленные.'],

@@ -1,3 +1,4 @@
+import { prefetch } from 'astro:prefetch';
 import { D, R, W, G, ST, full, page, lenis, store, scrollToY, scrollToEl, whenVisible } from './env.js';
 import { reveals, drawSvgs, counters, magnetic, cursor } from './effects.js';
 import { initDemos, initReel } from './demos.js';
@@ -10,6 +11,7 @@ const wipeEl = D.querySelector('.wipe');
 function navigate(href) {
   if (!full) { location.href = href; return; }
   if (page === 'home') store.set('pf-home-y', String(W.pageYOffset), true);
+  prefetch(href, { ignoreSlowConnection: true });
   G.timeline()
     .set(wipeEl, { transformOrigin: '50% 100%' })
     .to(wipeEl, { scaleY: 1, duration: 0.55, ease: 'power4.in' })

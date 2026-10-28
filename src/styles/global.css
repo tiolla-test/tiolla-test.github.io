@@ -460,6 +460,7 @@ figcaption b { color: var(--ink); font-weight: 600; }
 .p-done { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; }
 .p-hit { fill: none; stroke: transparent; stroke-width: 46; pointer-events: stroke; cursor: grab; }
 .p-st { cursor: pointer; }
+.p-st-hit { display: none; fill: transparent; }
 .p-st circle { fill: var(--ink); stroke: color-mix(in srgb, var(--cream) 35%, transparent); stroke-width: 2; }
 .p-st text { font: 500 15px var(--f-mono); letter-spacing: .06em; text-transform: uppercase; fill: var(--muted-d); }
 .p-tube { cursor: grab; outline: none; }
@@ -665,7 +666,7 @@ figcaption b { color: var(--ink); font-weight: 600; }
   .hero-photo { position: relative; width: 132px; margin: 0 0 40px; }
   .hero-vis { display: flex; flex-direction: column-reverse; }
 }
-@media (max-width: 560px) { .rs-rack, .rs-form { grid-template-columns: minmax(0, 1fr); } .rs-nav { display: none; } .rs { font-size: 13px; } .reel-stage { aspect-ratio: 4 / 5; } .reel-tabs button { padding: 0 8px; } .reel-dots { display: none; } }
+@media (max-width: 560px) { .rs-rack, .rs-form { grid-template-columns: minmax(0, 1fr); } .rs-nav { display: none; } .rs { font-size: 13px; } .reel-stage { aspect-ratio: 4 / 5; } .rs-rack .lv-grid > :nth-child(n+41) { display: none; } .rs-toast { max-width: calc(100% - 28px); } .reel-tabs button { padding: 0 8px; } .reel-dots { display: none; } }
 
 /* ФИЦ Биомед: схема пути образца слева, кейсы справа */
 .fmg { padding-top: clamp(28px, 4vw, 48px); }
@@ -733,4 +734,22 @@ figcaption b { color: var(--ink); font-weight: 600; }
   .menu-btn::after { content: ""; position: absolute; inset: -4px 0; }
   .lv-chip::after { content: ""; position: absolute; inset: -5px 0; }
   .c-val a::after { content: ""; position: absolute; inset: -11px 0; }
+}
+@media (pointer: coarse) {
+  .p-st-hit { display: inline; }
+  .lv-chips { row-gap: 10px; }
+}
+
+/* ── мелкий текст на телефоне: подписи не мельче 12 px, номера ячеек штатива 10–11 px ── */
+@media (max-width: 600px) {
+  .menu-btn, .tgl a, .chip, .dossier dt, .toc a::before, .brief .lbl, .opt .tag, .tbl th, .tbl thead td, .live-tag, .lv-legend,
+  .lv-s .mono, .lv-s small, .live-b .lv-stat, .lv-nav .st, .lv-com small, .hero-facts span, .reel-go, .exp .kind { font-size: 12px; }
+  .lv-grid, .rs .lv-grid, .rs-field small, .lv-thr span { font-size: 11px; }
+  .lv-c .p, .lv-c .c { font-size: 10px; }
+}
+
+/* ── первый экран на телефоне: фото над именем, проигрыватель сразу после текста ── */
+@media (max-width: 600px) {
+  .hero-vis { display: contents; }
+  .hero-photo { order: -1; width: 96px; margin: 0; }
 }
