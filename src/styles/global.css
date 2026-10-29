@@ -91,7 +91,12 @@ button { font: inherit; color: inherit; }
 .sw i { position: absolute; top: 3px; left: 3px; width: 12px; height: 12px; border-radius: 50%; background: currentColor; transition: transform .35s var(--ease-out); }
 .mtg[aria-pressed="true"] .sw i { transform: translateX(14px); }
 .menu-btn { display: none; appearance: none; background: none; border: 1px solid currentColor; border-radius: 999px; padding: 0 14px; min-height: 38px; cursor: pointer; font: 500 11px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; }
-.menu { position: fixed; inset: 0; z-index: 140; background: var(--ink); color: var(--cream); display: flex; flex-direction: column; justify-content: center; padding: 96px var(--pad) 40px; clip-path: inset(0 0 100% 0); visibility: hidden; transition: clip-path .6s var(--ease), visibility 0s linear .6s; }
+.menu { position: fixed; inset: 0; z-index: 140; background: var(--ink); color: var(--cream); display: flex; flex-direction: column; justify-content: flex-start; overflow-y: auto; overscroll-behavior: contain; padding: 0 var(--pad) 40px; clip-path: inset(0 0 100% 0); visibility: hidden; transition: clip-path .6s var(--ease), visibility 0s linear .6s; }
+/* auto margins centre the menu when it fits and let it scroll from the top when the screen is short (iPhone with Safari bars) */
+/* a solid strip under the header, so scrolled menu items do not run under the name */
+.menu::before { content: ""; position: sticky; top: 0; z-index: 1; flex-shrink: 0; height: 80px; margin: 0 calc(-1 * var(--pad)) 16px; background: var(--ink); }
+.menu > :first-child { margin-top: auto; }
+.menu > :last-child { margin-bottom: auto; }
 .menu.open { clip-path: inset(0 0 0 0); visibility: visible; transition: clip-path .6s var(--ease), visibility 0s; }
 .menu > a { font: 800 clamp(2rem, calc(11vw - 4px), 4.4rem)/1.05 var(--f-display); letter-spacing: -.045em; text-decoration: none; padding: 10px 0; border-bottom: 1px solid var(--rule-d); }
 @media (max-width: 860px) {
