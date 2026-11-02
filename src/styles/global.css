@@ -74,9 +74,14 @@ button { font: inherit; color: inherit; }
 .prog i { display: block; height: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; }
 
 /* ── шапка ─────────────────────────────────────────────────────────── */
-.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 150; transition: transform .55s var(--ease); display: flex; align-items: center; gap: clamp(10px, 2vw, 24px); padding: 14px var(--pad); color: #F4F0E8; mix-blend-mode: difference; pointer-events: none; }
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 150; transition: transform .55s var(--ease), background-color .3s, box-shadow .3s; display: flex; align-items: center; gap: clamp(10px, 2vw, 24px); padding: 14px var(--pad); color: #F4F0E8; mix-blend-mode: difference; pointer-events: none; }
 .nav a, .nav button { pointer-events: auto; }
 .nav.nav-up { transform: translateY(-110%); }
+/* after the first screen the header gets a solid backing in the page colour, so text under it does not show through */
+.nav.nav-solid { mix-blend-mode: normal; background: var(--paper); color: var(--ink); box-shadow: 0 1px 0 var(--rule); }
+.nav.nav-solid .tgl a[aria-current] { background: var(--ink); color: var(--paper); }
+body:has(.menu.open) .nav.nav-solid { mix-blend-mode: difference; background: none; color: #F4F0E8; box-shadow: none; }
+body:has(.menu.open) .nav.nav-solid .tgl a[aria-current] { background: #F4F0E8; color: #000; }
 .logo { display: flex; align-items: center; gap: 10px; min-height: 44px; text-decoration: none; font: 700 15px/1 var(--f-display); letter-spacing: -.01em; margin-right: auto; white-space: nowrap; }
 .logo i { width: 10px; height: 10px; border-radius: 50%; background: currentColor; }
 .nav-links { display: flex; gap: clamp(16px, 2.4vw, 32px); }

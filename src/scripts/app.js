@@ -168,8 +168,11 @@ D.addEventListener('keydown', (e) => {
 });
 
 let lastY = 0;
+const solid = () => nav.classList.toggle('nav-solid', W.pageYOffset > 8);
+solid();
 W.addEventListener('scroll', () => {
   const y = W.pageYOffset;
+  solid();
   if (Math.abs(y - lastY) > 6) {
     nav.classList.toggle('nav-up', y > lastY && y > 360 && !menu.classList.contains('open'));
     lastY = y;
