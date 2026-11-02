@@ -269,9 +269,9 @@
     "slugs": [
       "participant-portal",
       "doctor-portal",
-      "fic-overview",
+      "participant-portal",
       "aliquot-station",
-      "fic-overview"
+      "participant-portal"
     ],
     "labels": {
       "ru": [
