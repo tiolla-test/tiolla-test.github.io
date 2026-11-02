@@ -23,13 +23,13 @@ export function assetUrl(path) {
 
 export const UI = {
   ru: {
-    all: 'Все работы', toc: 'Разделы', about: 'О проекте', next: 'Следующий кейс', first: 'К первому кейсу',
+    all: 'Все проекты', toc: 'Разделы', about: 'О проекте', next: 'Следующий кейс', first: 'К первому кейсу',
     live: 'Живой прототип', lives: 'Живые прототипы', liveChip: 'живой прототип',
     title: 'продуктовый дизайнер',
     description: 'Продуктовый дизайнер: медицинская информационная система ФИЦ Биомед и конструктор роботов MANGO OFFICE.',
   },
   en: {
-    all: 'All work', toc: 'Contents', about: 'About the project', next: 'Next case', first: 'Back to the first case',
+    all: 'All projects', toc: 'Contents', about: 'About the project', next: 'Next case', first: 'Back to the first case',
     live: 'Live prototype', lives: 'Live prototypes', liveChip: 'live prototype',
     title: 'product designer',
     description: 'Product designer: the FIC Biomed medical information system and the MANGO OFFICE robot builder.',

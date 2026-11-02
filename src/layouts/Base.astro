@@ -19,7 +19,7 @@ const abs = (p) => (Astro.site ? new URL(p, Astro.site).href : p);
 const shareImg = image || await ogImage(photoSrc);
 const indexed = page !== 'error';
 const links = [
-  ['work', 'Работы', 'Work'],
+  ['work', 'Проекты', 'Projects'],
   ['about', 'Обо мне', 'About'],
   ['experience', 'Опыт', 'Experience'],
   ['education', 'Образование', 'Education'],

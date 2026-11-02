@@ -54,7 +54,7 @@ const contactHref = (h) => (/^(mailto:|https?:)/.test(h) ? h : assetUrl(h));
       {facts.map(([n, label]) => <li><b>{n}</b><span>{label}</span></li>)}
     </ul>
     <div class="hero-act h-anim">
-      <a class="btn-round" href="#work" data-magnetic>{t('Смотреть работы', 'See the work')}<span class="arr" aria-hidden="true">↓</span></a>
+      <a class="btn-round" href="#work" data-magnetic>{t('Смотреть проекты', 'See projects')}<span class="arr" aria-hidden="true">↓</span></a>
       <a class="hero-link mono" href="#contact">{t('Контакты', 'Contact')} →</a>
     </div>
   </div>
@@ -84,7 +84,7 @@ const contactHref = (h) => (/^(mailto:|https?:)/.test(h) ? h : assetUrl(h));
   <header class="sec-head">
     <div>
       <p class="mono rv">{t('Кейсы целиком: задача, решения, проверка, результат', 'Full case studies: problem, decisions, testing, result')}</p>
-      <h2 class="display rv" id="work-t">{t('Работы', 'Work')}</h2>
+      <h2 class="display rv" id="work-t">{t('Проекты', 'Projects')}</h2>
     </div>
     <span class="count rv" aria-label={String(total)}>{total}</span>
   </header>
