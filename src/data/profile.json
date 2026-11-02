@@ -27,8 +27,8 @@
         "en": ["full case study", "full case studies"]
       },
       "live": {
-        "ru": ["живой прототип", "живых прототипа", "живых прототипов"],
-        "en": ["live prototype", "live prototypes"]
+        "ru": ["прототип", "прототипа", "прототипов"],
+        "en": ["prototype", "prototypes"]
       }
     }
   },
