@@ -131,7 +131,7 @@ const contactHref = (h) => (/^(mailto:|https?:)/.test(h) ? h : assetUrl(h));
                   data-st={c.stops ? c.stops.join(',') : undefined} data-marks={c.marks ? c.marks.map((m) => (m === 'qm' ? 'platform' : m)).join(' ') : (c.schema === 'qm' ? 'platform' : undefined)} data-tag={c.group === 'mango' ? l.tag : undefined}>
                   <span class="mono idx">{pad(c.n)}</span>
                   <span class="row-title">{c.titles[lang]}</span>
-                  <span class="row-sub mono">{c.group === 'mango' ? l.kicker : l.meta}{l.chip && <span class="chip">{l.chip}</span>}{c.live?.length > 0 && <Fragment set:html={liveChip} />}</span>
+                  <span class="row-sub mono">{c.group === 'mango' ? l.kicker : l.meta}{c.live?.length > 0 && <Fragment set:html={liveChip} />}</span>
                   <span class="row-arrow" aria-hidden="true">→</span>
                 </a></li>
               );
