@@ -179,6 +179,23 @@ W.addEventListener('scroll', () => {
   }
 }, { passive: true });
 
+/* home: the address follows the section on screen, so it can be copied as a link to that section */
+let spyOn = false;
+function spyHash() {
+  if (!spyOn) return;
+  /* a section counts once its top reaches the header (scrollToEl stops it 84 px below the edge); at the very bottom the last
+     sections never get that high, so the line drops to the bottom of the screen */
+  const atEnd = W.innerHeight + W.pageYOffset >= D.documentElement.scrollHeight - 4;
+  const line = atEnd ? W.innerHeight * 0.6 : 120;
+  let cur = '';
+  D.querySelectorAll('#home section[id], #home .group[id]').forEach((el) => { if (el.getBoundingClientRect().top <= line) cur = el.id; });
+  if (cur !== decodeURIComponent(location.hash.slice(1))) history.replaceState(null, '', cur ? '#' + cur : location.pathname + location.search);
+}
+if (page === 'home') {
+  let spyRaf = 0;
+  W.addEventListener('scroll', () => { if (!spyRaf) spyRaf = requestAnimationFrame(() => { spyRaf = 0; spyHash(); }); }, { passive: true });
+}
+
 /* start */
 magnetic(D);
 cursor();
@@ -205,6 +222,8 @@ function start() {
     };
     if (restoreY !== null || location.hash) { R.classList.remove('show-pre'); D.querySelector('.pre')?.remove(); R.classList.add('hero-ready'); intro(); }
     else preloader(intro);
+    /* after the opening scroll to the hash or the saved place, not before: at y = 0 the spy would erase the hash */
+    requestAnimationFrame(() => requestAnimationFrame(() => { spyOn = true; }));
   } else if (page === 'case') {
     const art = D.querySelector('.case');
     initDemos(art);
